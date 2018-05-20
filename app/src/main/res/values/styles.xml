@@ -16,6 +16,9 @@
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:buttonStyle">@style/buttonStyle</item>
 
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
     </style>
 
     <style name="buttonStyle" parent="android:Widget.Button">
