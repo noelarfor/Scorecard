@@ -17,24 +17,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "UserManager.db";
+    private static final String DATABASE_NAME = "scorecardManager.db";
 
     // User table name
     private static final String TABLE_USER = "user";
+    private static final String TABLE_SCORE = "score";
+    private static final String TABLE_RESULT = "result";
+
+    // Common column names
+    private static final String COLUMN_ID = "id";
 
     // User Table Columns names
-    private static final String COLUMN_USER_ID = "user_id";
     private static final String COLUMN_USER_NAME = "user_name";
-    //private static final String COLUMN_USER_EMAIL = "user_email";
     private static final String COLUMN_USER_PASSWORD = "user_password";
 
-    // create table sql query
-    private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-            + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_NAME + " TEXT,"
-            /*+ COLUMN_USER_EMAIL + " TEXT,"*/ + COLUMN_USER_PASSWORD + " TEXT" + ")";
+    // Score Table Column names
+    private static final String COLUMN_SCORE_NAME = "score_name";
+    private static final String COLUMN_SCORE_TYPE = "score_type";
+    private static final String COLUMN_SCORE_MODE = "score_mode";
+    private static final String COLUMN_NUM_USERS = "num_users";
+    private static final String COLUMN_SCORE_TIMESTAMP = "score_timestamp";
 
-    // drop table sql query
-    private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
+    // Result Table Column names
+    private static final String COLUMN_RESULT = "result";
+    private static final String COLUmN_WIN_LOSE = "win_lose";
+
+    // create table sql query
+    // User table create statement
+    private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_USER_NAME + " TEXT,"
+            + COLUMN_USER_PASSWORD + " TEXT"
+            + ")";
+
+    // Score table create statement
+    private String CREATE_SCORE_TABLE = "CREATE TABLE " + TABLE_SCORE + "("
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_SCORE_NAME + " TEXT,"
+            + COLUMN_SCORE_TYPE + " INTEGER,"
+            + COLUMN_SCORE_MODE + " INTEGER,"
+            + COLUMN_NUM_USERS + " INTEGER,"
+            + COLUMN_SCORE_TIMESTAMP + " DATETIME"
+            + ")";
+
+    // Result table create statement
+    private String CREATE_RESULT_TABLE = "CREATE TABLE " + TABLE_RESULT + "("
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_RESULT + " INTEGER,"
+            + COLUmN_WIN_LOSE + " TEXT"
+            + ")";
 
     /**
      * Constructor
@@ -47,7 +78,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(CREATE_USER_TABLE);
+        db.execSQL(CREATE_SCORE_TABLE);
+        db.execSQL(CREATE_RESULT_TABLE);
     }
 
 
@@ -55,12 +89,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         //Drop User Table if exist
-        db.execSQL(DROP_USER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCORE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULT);
 
         // Create tables again
         onCreate(db);
-
     }
+
+    /* ======================= "user" table methods ==========================" */
 
     /**
      * This method is to create user record
@@ -72,7 +109,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_NAME, user.getName());
-        //values.put(COLUMN_USER_EMAIL, user.getEmail());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
 
         // Inserting Row
@@ -88,7 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<User> getAllUser() {
         // array of columns to fetch
         String[] columns = {
-                COLUMN_USER_ID,
+                COLUMN_ID,
                 //COLUMN_USER_EMAIL,
                 COLUMN_USER_NAME,
                 COLUMN_USER_PASSWORD
@@ -119,7 +155,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 User user = new User();
-                user.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USER_ID))));
+                user.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_ID))));
                 user.setName(cursor.getString(cursor.getColumnIndex(COLUMN_USER_NAME)));
                 //user.setEmail(cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL)));
                 user.setPassword(cursor.getString(cursor.getColumnIndex(COLUMN_USER_PASSWORD)));
@@ -148,7 +184,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
 
         // updating row
-        db.update(TABLE_USER, values, COLUMN_USER_ID + " = ?",
+        db.update(TABLE_USER, values, COLUMN_ID + " = ?",
                 new String[]{String.valueOf(user.getId())});
         db.close();
     }
@@ -161,7 +197,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         // delete user record by id
-        db.delete(TABLE_USER, COLUMN_USER_ID + " = ?",
+        db.delete(TABLE_USER, COLUMN_ID + " = ?",
                 new String[]{String.valueOf(user.getId())});
         db.close();
     }
@@ -175,9 +211,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean checkUser(String user) {
 
         // array of columns to fetch
-        String[] columns = {
-                COLUMN_USER_ID
-        };
+        String[] columns = { COLUMN_ID };
         SQLiteDatabase db = this.getReadableDatabase();
 
         // selection criteria
@@ -220,9 +254,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean checkUser(String user, String password) {
 
         // array of columns to fetch
-        String[] columns = {
-                COLUMN_USER_ID
-        };
+        String[] columns = { COLUMN_ID };
         SQLiteDatabase db = this.getReadableDatabase();
         // selection criteria
         String selection = COLUMN_USER_NAME + " = ?" + " AND " + COLUMN_USER_PASSWORD + " = ?";
@@ -254,4 +286,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return false;
     }
+
+    /* ======================= "score" table methods ==========================" */
+
+    /* ======================= "result" table methods =========================" */
 }

@@ -1,13 +1,11 @@
 package com.roleon.scorecard.adapters;
 
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.model.User;
