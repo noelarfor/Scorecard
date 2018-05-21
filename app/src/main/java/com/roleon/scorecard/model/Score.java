@@ -4,7 +4,7 @@ public class Score {
 
     private int id;
     private String score_name;
-    private int score_type;
+    private int score_typ;
     private int score_mode;
     private int num_users;
     private String timestamp;
@@ -25,12 +25,12 @@ public class Score {
         this.score_name = score_name;
     }
 
-    public int getScore_type() {
-        return score_type;
+    public int getScore_typ() {
+        return score_typ;
     }
 
-    public void setScore_type(int score_type) {
-        this.score_type = score_type;
+    public void setScore_typ(int score_typ) {
+        this.score_typ = score_typ;
     }
 
     public int getScore_mode() {

@@ -4,7 +4,7 @@ public class Result {
 
     private int id;
     private int result;
-    private String win_loose;
+    private String win_loss_drawn;
 
     public int getId() {
         return id;
@@ -22,11 +22,11 @@ public class Result {
         this.result = result;
     }
 
-    public String getWin_loose() {
-        return win_loose;
+    public String getWin_loss_drawn() {
+        return win_loss_drawn;
     }
 
-    public void setWin_loose(String win_loose) {
-        this.win_loose = win_loose;
+    public void setWin_loss_drawn(String win_loss_drawn) {
+        this.win_loss_drawn = win_loss_drawn;
     }
 }
