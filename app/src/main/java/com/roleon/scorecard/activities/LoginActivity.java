@@ -13,7 +13,9 @@ import android.view.View;
 
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.helpers.InputValidation;
-import com.roleon.scorecard.sql.DatabaseHelper;
+import com.roleon.scorecard.sql.repo.UserRepo;
+
+import static com.roleon.scorecard.sql.repo.UserRepo.*;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = LoginActivity.this;
@@ -31,7 +33,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private AppCompatTextView textViewLinkRegister;
 
     private InputValidation inputValidation;
-    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +76,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * This method is to initialize objects to be used
      */
     private void initObjects() {
-        databaseHelper = new DatabaseHelper(activity);
         inputValidation = new InputValidation(activity);
-
     }
 
     /**
@@ -113,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        if (databaseHelper.checkUser(textInputEditTextUser.getText().toString().trim()
+        if (UserRepo.checkUser(textInputEditTextUser.getText().toString().trim()
                 , textInputEditTextPassword.getText().toString().trim())) {
 
 

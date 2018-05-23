@@ -13,19 +13,18 @@ import com.roleon.scorecard.R;
 import com.roleon.scorecard.adapters.UsersRecyclerAdapter;
 import com.roleon.scorecard.helpers.SimpleDividerItemDecoration;
 import com.roleon.scorecard.model.User;
-import com.roleon.scorecard.sql.DatabaseHelper;
+import com.roleon.scorecard.sql.repo.UserRepo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsersListActivity extends AppCompatActivity {
 
-    private AppCompatActivity activity = UsersListActivity.this;
+    //private AppCompatActivity activity = UsersListActivity.this;
     private AppCompatTextView textViewName;
     private RecyclerView recyclerViewUsers;
     private List<User> listUsers;
     private UsersRecyclerAdapter usersRecyclerAdapter;
-    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +56,6 @@ public class UsersListActivity extends AppCompatActivity {
         recyclerViewUsers.setItemAnimator(new DefaultItemAnimator());
         recyclerViewUsers.setHasFixedSize(true);
         recyclerViewUsers.setAdapter(usersRecyclerAdapter);
-        databaseHelper = new DatabaseHelper(activity);
 
         recyclerViewUsers.addItemDecoration(new SimpleDividerItemDecoration(
                 getApplicationContext()
@@ -79,7 +77,7 @@ public class UsersListActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 //listUsers.clear();
-                listUsers.addAll(databaseHelper.getAllUser());
+                listUsers.addAll(UserRepo.getAllUser());
 
                 return null;
             }

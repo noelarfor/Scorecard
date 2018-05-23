@@ -14,7 +14,7 @@ import android.view.View;
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.helpers.InputValidation;
 import com.roleon.scorecard.model.User;
-import com.roleon.scorecard.sql.DatabaseHelper;
+import com.roleon.scorecard.sql.repo.UserRepo;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,7 +34,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private AppCompatTextView appCompatTextViewLoginLink;
 
     private InputValidation inputValidation;
-    private DatabaseHelper databaseHelper;
     private User user;
 
     @Override
@@ -82,7 +81,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
      */
     private void initObjects() {
         inputValidation = new InputValidation(activity);
-        databaseHelper = new DatabaseHelper(activity);
         user = new User();
 
     }
@@ -122,12 +120,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        if (!databaseHelper.checkUser(textInputEditTextUser.getText().toString().trim())) {
+        if (!UserRepo.checkUser(textInputEditTextUser.getText().toString().trim())) {
 
             user.setName(textInputEditTextUser.getText().toString().trim());
             user.setPassword(textInputEditTextPassword.getText().toString().trim());
 
-            databaseHelper.addUser(user);
+            UserRepo.addUser(user);
 
             // Snack Bar to show success message that record saved successfully
             Snackbar.make(nestedScrollView, getString(R.string.success_message), Snackbar.LENGTH_LONG).show();
