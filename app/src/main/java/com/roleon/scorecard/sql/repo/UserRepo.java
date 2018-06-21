@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.roleon.scorecard.helpers.Timer;
 import com.roleon.scorecard.model.User;
 import com.roleon.scorecard.sql.DatabaseManager;
 
@@ -25,8 +24,8 @@ public class UserRepo {
         return "CREATE TABLE " + User.TABLE + "("
                 + User.KEY_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + User.KEY_USER_NAME + " TEXT,"
-                + User.KEY_USER_PASSWORD + " TEXT"
-                + User.KEY_CREATED_AT + " DATETIME"
+                + User.KEY_USER_PASSWORD + " TEXT,"
+                + User.KEY_CREATED_AT + " TEXT"
                 + ")";
     }
 
@@ -36,7 +35,7 @@ public class UserRepo {
         ContentValues values = new ContentValues();
         values.put(User.KEY_USER_NAME, user.getName());
         values.put(User.KEY_USER_PASSWORD, user.getPassword());
-        values.put(User.KEY_CREATED_AT, Timer.getDateTime());
+        values.put(User.KEY_CREATED_AT, user.getCreated_at());
 
         // Inserting Row
         db.insert(User.TABLE, null, values);

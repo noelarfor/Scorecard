@@ -33,6 +33,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
     public void onBindViewHolder(UserViewHolder holder, int position) {
         holder.textViewName.setText(listUsers.get(position).getName());
         holder.textViewPassword.setText(listUsers.get(position).getPassword());
+        holder.textViewDate.setText(listUsers.get(position).getCreated_at());
     }
 
     @Override
@@ -49,11 +50,13 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
 
         public AppCompatTextView textViewName;
         public AppCompatTextView textViewPassword;
+        public AppCompatTextView textViewDate;
 
         public UserViewHolder(View view) {
             super(view);
             textViewName = (AppCompatTextView) view.findViewById(R.id.textViewName);
             textViewPassword = (AppCompatTextView) view.findViewById(R.id.textViewPassword);
+            textViewDate = (AppCompatTextView) view.findViewById(R.id.textViewDate);
         }
     }
 

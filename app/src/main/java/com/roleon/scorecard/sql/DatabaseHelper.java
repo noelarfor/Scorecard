@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.roleon.scorecard.helpers.App;
+import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.model.User;
 import com.roleon.scorecard.sql.repo.UserRepo;
 
@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName().toString();
 
     public DatabaseHelper() {
-        super(App.getContext(), DATABASE_NAME, null, DATABASE_VERSION);
+        super(AppHelper.getContext(), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -44,12 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 }
 
     /*
-    // Score Table Column names
-    private static final String COLUMN_SCORE_NAME = "score_name";
-    private static final String COLUMN_SCORE_TYPE = "score_type";
-    private static final String COLUMN_SCORE_MODE = "score_mode";
-    private static final String COLUMN_NUM_USERS = "num_users";
-    private static final String COLUMN_SCORE_TIMESTAMP = "score_timestamp";
+
 
     // Result Table Column names
     private static final String COLUMN_RESULT = "result";

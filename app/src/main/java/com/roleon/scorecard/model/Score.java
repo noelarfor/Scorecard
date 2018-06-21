@@ -2,19 +2,31 @@ package com.roleon.scorecard.model;
 
 public class Score {
 
-    private int id;
+    public static final String TAG = Score.class.getSimpleName();
+    public static final String TABLE = "score";
+    // Table Column names
+    private static final String KEY_SCORE_ID = "score_id";
+    private static final String KEY_SCORE_NAME = "score_name";
+    private static final String KEY_SCORE_TYPE = "score_type";
+    private static final String KEY_SCORE_MODE = "score_mode";
+    private static final String KEY_NUM_USERS = "num_users";
+    private static final String KEY_CREATED_AT = "created_at";
+    private static final String KEY_GAME_ID = "game_id";
+
+    private int score_id;
     private String score_name;
     private int score_typ;
     private int score_mode;
     private int num_users;
-    private String timestamp;
+    private String created_at;
+    private int game_id;
 
     public int getId() {
-        return id;
+        return score_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int score_id) {
+        this.score_id = score_id;
     }
 
     public String getScore_name() {
@@ -50,10 +62,14 @@ public class Score {
     }
 
     public String getTimestamp() {
-        return timestamp;
+        return created_at;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestamp(String created_at) {
+        this.created_at = created_at;
     }
+
+    public int getGame_id() { return game_id; }
+
+    public void setGame_id(int game_id) { this.game_id = game_id; }
 }

@@ -1,13 +1,19 @@
 <resources>
     <string name="app_name">Scorecard</string>
 
-    <!-- Login Register -->
-    <string name="text_accounts">List Of All Accounts:</string>
-    <string name="hint_username">Username</string>
-    <string name="hint_password">Password</string>
-    <string name="hint_confirm_password">Confirm Password</string>
+    <!-- Button Text -->
+    <string name="text_show_userlist">Show Users</string>
     <string name="text_login">Login</string>
     <string name="text_register">Register</string>
+
+    <!-- User Recycler -->
+    <string name="hint_username">Username:</string>
+    <string name="hint_password">Password:</string>
+    <string name="hint_date">created at:</string>
+
+    <!-- Login Register -->
+    <string name="text_accounts">List Of All Accounts:</string>
+    <string name="hint_confirm_password">Confirm Password</string>
     <string name="error_message_username">Enter Valid Username</string>
     <string name="error_message_password">Enter Password</string>
     <string name="success_message">Registration Successful</string>

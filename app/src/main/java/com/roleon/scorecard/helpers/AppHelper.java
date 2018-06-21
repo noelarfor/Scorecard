@@ -6,7 +6,11 @@ import android.content.Context;
 import com.roleon.scorecard.sql.DatabaseHelper;
 import com.roleon.scorecard.sql.DatabaseManager;
 
-public class  App extends Application {
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class AppHelper extends Application {
 
     private static Context context;
     private static DatabaseHelper databaseHelper;
@@ -22,6 +26,15 @@ public class  App extends Application {
 
     public static Context getContext(){
         return context;
+    }
+
+    public static String getDateTime() {
+
+        //SimpleDateFormat dateFormat = new SimpleDateFormat(
+        //        "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }
 
