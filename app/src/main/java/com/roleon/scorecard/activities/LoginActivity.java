@@ -13,7 +13,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.roleon.scorecard.R;
+import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.helpers.InputValidation;
+import com.roleon.scorecard.model.Score;
+import com.roleon.scorecard.sql.repo.ScoreRepo;
 import com.roleon.scorecard.sql.repo.UserRepo;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -34,6 +37,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private InputValidation inputValidation;
     private UserRepo userRepo;
+
+    private ScoreRepo scoreRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +87,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         inputValidation = new InputValidation(activity);
         userRepo = new UserRepo();
+        scoreRepo = new ScoreRepo();
     }
 
     /**
@@ -107,30 +113,64 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void showUserList() {
-            Intent accountsIntent = new Intent(activity, UsersListActivity.class);
+        Intent accountsIntent = new Intent(activity, UsersListActivity.class);
         accountsIntent.putExtra("USER_NAME", "Admin");
-            startActivity(accountsIntent);
+        startActivity(accountsIntent);
     }
 
     /**
      * This method is to validate the input text fields and verify login credentials from SQLite
      */
     private void verifyFromSQLite() {
-        Toast.makeText(LoginActivity.this, "verifyFromSQLite 1",
-                Toast.LENGTH_LONG).show();
         if (!inputValidation.isInputEditTextFilled(textInputEditTextUser, textInputLayoutUser, getString(R.string.error_message_username))) {
             return;
         }
         if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, getString(R.string.error_message_password))) {
             return;
         }
-
         if (userRepo.checkUser(textInputEditTextUser.getText().toString().trim()
                 , textInputEditTextPassword.getText().toString().trim())) {
 
-            Toast.makeText(LoginActivity.this, "This is my Toast message!",
-                    Toast.LENGTH_LONG).show();
-            Intent accountsIntent = new Intent(activity, UsersListActivity.class);
+            Toast.makeText(LoginActivity.this, "User and Password match",
+                    Toast.LENGTH_SHORT).show();
+
+            Score score = new Score();
+            score.setScore_name("TestScore1");
+            score.setUser_Id((userRepo.getUser(textInputEditTextUser.getText().toString())).getId());
+            score.setScore_typ(0);
+            score.setScore_mode(0);
+            score.setNum_users(2);
+            score.setGame_id(1);
+            score.setLast_update(AppHelper.getDateTime());
+
+            scoreRepo.addScore(score);
+
+            score.setScore_name("TestScore2");
+            score.setUser_Id((userRepo.getUser(textInputEditTextUser.getText().toString())).getId());
+            score.setScore_typ(0);
+            score.setScore_mode(0);
+            score.setNum_users(2);
+            score.setGame_id(1);
+            score.setLast_update(AppHelper.getDateTime());
+
+            scoreRepo.addScore(score);
+
+            score.setScore_name("TestScore3");
+            score.setUser_Id((userRepo.getUser(textInputEditTextUser.getText().toString())).getId());
+            score.setScore_typ(0);
+            score.setScore_mode(0);
+            score.setNum_users(2);
+            score.setGame_id(1);
+            score.setLast_update(AppHelper.getDateTime());
+
+            scoreRepo.addScore(score);
+
+            if (scoreRepo.checkScore("TestScore3")) {
+                Toast.makeText(LoginActivity.this, "Name already used!",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            Intent accountsIntent = new Intent(activity, ScoreListActivity.class);
             accountsIntent.putExtra("USER_NAME", textInputEditTextUser.getText().toString().trim());
             emptyInputEditText();
             startActivity(accountsIntent);

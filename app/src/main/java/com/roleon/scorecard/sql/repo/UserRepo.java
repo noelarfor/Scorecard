@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.roleon.scorecard.model.Score;
 import com.roleon.scorecard.model.User;
 import com.roleon.scorecard.sql.DatabaseManager;
 
@@ -12,12 +13,12 @@ import java.util.List;
 
 public class UserRepo {
 
-    private User user;
+    /*private User user;
 
     public UserRepo() {
 
         user = new User();
-    }
+    }*/
 
     public static String createTable() {
 
@@ -89,6 +90,54 @@ public class UserRepo {
 
         // return user list
         return userList;
+    }
+
+    public static User getUser(String username) {
+        // array of columns to fetch
+        String[] columns = {
+                User.KEY_USER_ID,
+                User.KEY_USER_NAME,
+                User.KEY_USER_PASSWORD,
+                User.KEY_CREATED_AT
+        };
+
+        // selection criteria
+        String selection = User.KEY_USER_NAME + " = ?";
+
+        // selection argument
+        String[] selectionArgs = {username};
+
+        User user = new User();
+
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
+        // query the user table
+        /**
+         * Here query function is used to fetch records from user table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
+         */
+        Cursor cursor = db.query(User.TABLE, //Table to query
+                columns,    //columns to return
+                selection,        //columns for the WHERE clause
+                selectionArgs,        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                null); //The sort order
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        user.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(User.KEY_USER_ID))));
+        user.setName(cursor.getString(cursor.getColumnIndex(User.KEY_USER_NAME)));
+        user.setPassword(cursor.getString(cursor.getColumnIndex(User.KEY_USER_PASSWORD)));
+        user.setCreated_at(cursor.getString(cursor.getColumnIndex(User.KEY_CREATED_AT)));
+
+        cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
+
+        // return user list
+        return user;
     }
 
     public void updateUser(User user) {

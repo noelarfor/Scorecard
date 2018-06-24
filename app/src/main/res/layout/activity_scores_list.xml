@@ -30,7 +30,7 @@
                 android:text="@string/text_hello" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewName"
+                android:id="@+id/textViewUserName"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:text="@string/text_accounts" />
+        android:text="@string/text_scores" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,29 +62,44 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_username" />
+                android:text="@string/hint_scorename" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_password" />
+                android:text="@string/hint_typ" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_date" />
+                android:text="@string/hint_mode" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:layout_weight="1"
+                android:text="@string/hint_last_update" />
 
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewUsers"
+            android:id="@+id/recyclerViewScores"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="1dp" />
+
+        <android.support.v7.widget.AppCompatButton
+            style="@style/buttonStyle"
+            android:id="@+id/appCompatButtonCreateGame"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/text_create_score" />
 
     </LinearLayout>
 </android.support.v7.widget.LinearLayoutCompat>

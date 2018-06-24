@@ -1,17 +1,26 @@
 <resources>
     <string name="app_name">Scorecard</string>
+    <string name="hint_not_implemented">not available</string>
 
     <!-- Button Text -->
     <string name="text_show_userlist">Show Users</string>
     <string name="text_login">Login</string>
     <string name="text_register">Register</string>
+    <string name="text_create_score">Create Game</string>
 
-    <!-- User Recycler -->
-    <string name="hint_username">Username:</string>
-    <string name="hint_password">Password:</string>
-    <string name="hint_date">created at:</string>
+    <!-- UserList Activity -->
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_date">created at</string>
 
-    <!-- Login Register -->
+    <!-- Score Activity -->
+    <string name="hint_scorename">Name</string>
+    <string name="hint_typ">Typ</string>
+    <string name="hint_mode">Mode</string>
+    <string name="hint_last_update">Last update</string>
+    <string name="hint_fifa">Fifa</string>
+
+    <!-- Login Register Activity -->
     <string name="text_accounts">List Of All Accounts:</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="error_message_username">Enter Valid Username</string>
@@ -23,4 +32,8 @@
     <string name="error_password_match">Password Does Not Match</string>
     <string name="error_valid_username_password">Wrong Username or Password</string>
     <string name="text_hello">Welcome,</string>
+
+    <!-- ScoreList Activity -->
+    <string name="text_scores">List Of All Scores:</string>
+
 </resources>

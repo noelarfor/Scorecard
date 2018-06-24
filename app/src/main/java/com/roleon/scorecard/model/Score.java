@@ -5,28 +5,38 @@ public class Score {
     public static final String TAG = Score.class.getSimpleName();
     public static final String TABLE = "score";
     // Table Column names
-    private static final String KEY_SCORE_ID = "score_id";
-    private static final String KEY_SCORE_NAME = "score_name";
-    private static final String KEY_SCORE_TYPE = "score_type";
-    private static final String KEY_SCORE_MODE = "score_mode";
-    private static final String KEY_NUM_USERS = "num_users";
-    private static final String KEY_CREATED_AT = "created_at";
-    private static final String KEY_GAME_ID = "game_id";
+    public static final String KEY_SCORE_ID = "score_id";
+    public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_SCORE_NAME = "score_name";
+    public static final String KEY_SCORE_TYPE = "score_type";
+    public static final String KEY_SCORE_MODE = "score_mode";
+    public static final String KEY_NUM_USERS = "num_users";
+    public static final String KEY_LAST_UPDDATE = "last_update";
+    public static final String KEY_GAME_ID = "game_id";
 
     private int score_id;
+    private int user_id;
     private String score_name;
     private int score_typ;
     private int score_mode;
     private int num_users;
-    private String created_at;
+    private String last_update;
     private int game_id;
 
-    public int getId() {
+    public int getScore_Id() {
         return score_id;
     }
 
-    public void setId(int score_id) {
+    public void setScore_Id(int score_id) {
         this.score_id = score_id;
+    }
+
+    public int getUser_Id() {
+        return user_id;
+    }
+
+    public void setUser_Id(int user_id) {
+        this.user_id = user_id;
     }
 
     public String getScore_name() {
@@ -61,12 +71,12 @@ public class Score {
         this.num_users = num_users;
     }
 
-    public String getTimestamp() {
-        return created_at;
+    public String getLast_update() {
+        return last_update;
     }
 
-    public void setTimestamp(String created_at) {
-        this.created_at = created_at;
+    public void setLast_update(String last_update) {
+        this.last_update = last_update;
     }
 
     public int getGame_id() { return game_id; }

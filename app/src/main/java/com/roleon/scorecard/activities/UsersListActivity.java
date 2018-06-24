@@ -20,7 +20,6 @@ import java.util.List;
 
 public class UsersListActivity extends AppCompatActivity {
 
-    //private AppCompatActivity activity = UsersListActivity.this;
     private AppCompatTextView textViewName;
     private RecyclerView recyclerViewUsers;
     private List<User> listUsers;

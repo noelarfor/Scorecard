@@ -8,7 +8,6 @@ import com.roleon.scorecard.sql.DatabaseManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class AppHelper extends Application {
 

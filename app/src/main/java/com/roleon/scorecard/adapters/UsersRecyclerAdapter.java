@@ -59,6 +59,4 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
             textViewDate = (AppCompatTextView) view.findViewById(R.id.textViewDate);
         }
     }
-
-
 }

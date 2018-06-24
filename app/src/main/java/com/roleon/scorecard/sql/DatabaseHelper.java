@@ -5,7 +5,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.roleon.scorecard.helpers.AppHelper;
+import com.roleon.scorecard.model.Score;
 import com.roleon.scorecard.model.User;
+import com.roleon.scorecard.sql.repo.ScoreRepo;
 import com.roleon.scorecard.sql.repo.UserRepo;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -25,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL(UserRepo.createTable());
-        //db.execSQL(CREATE_SCORE_TABLE);
+        db.execSQL(ScoreRepo.createTable());
         //db.execSQL(CREATE_RESULT_TABLE);
     }
 
@@ -35,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //Drop table if existed, all data will be gone!!!
         db.execSQL("DROP TABLE IF EXISTS " + User.TABLE);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCORE);
+        db.execSQL("DROP TABLE IF EXISTS " + Score.TABLE);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULT);
 
         // Create tables again
@@ -49,17 +51,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Result Table Column names
     private static final String COLUMN_RESULT = "result";
     private static final String COLUmN_WIN_LOSE = "win_lose";
-
-    // create table sql query
-    // Score table create statement
-    private String CREATE_SCORE_TABLE = "CREATE TABLE " + TABLE_SCORE + "("
-            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COLUMN_SCORE_NAME + " TEXT,"
-            + COLUMN_SCORE_TYPE + " INTEGER,"
-            + COLUMN_SCORE_MODE + " INTEGER,"
-            + COLUMN_NUM_USERS + " INTEGER,"
-            + COLUMN_SCORE_TIMESTAMP + " DATETIME"
-            + ")";
 
     // Result table create statement
     private String CREATE_RESULT_TABLE = "CREATE TABLE " + TABLE_RESULT + "("
