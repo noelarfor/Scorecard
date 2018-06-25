@@ -21,21 +21,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:text="@string/text_hello" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/textViewUserName"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatButton
+                style="@style/buttonStyle"
+                android:id="@+id/appCompatButtonUserList"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:text="@string/text_show_userlist" />
+
+            <android.support.v7.widget.AppCompatButton
+                style="@style/buttonStyle"
+                android:id="@+id/appCompatButtonAddGame"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:text="@string/text_create_game_short" />
+        </android.support.v7.widget.LinearLayoutCompat>
 
     </android.support.v7.widget.LinearLayoutCompat>
 
@@ -43,47 +69,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
+        android:layout_marginTop="10dp"
         android:text="@string/text_scores" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorTextHint"
             android:orientation="horizontal"
-            android:padding="5dp"
-            android:background="@color/colorTextHint">
+            android:padding="5dp">
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_scorename" />
+                android:text="@string/hint_scorename"
+                android:textColor="@color/colorPrimary" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_typ" />
+                android:text="@string/hint_typ"
+                android:textColor="@color/colorPrimary" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_mode" />
+                android:text="@string/hint_mode"
+                android:textColor="@color/colorPrimary" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_last_update" />
+                android:text="@string/hint_num_users"
+                android:textColor="@color/colorPrimary" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/hint_last_update"
+                android:textColor="@color/colorPrimary" />
 
         </LinearLayout>
 
@@ -91,15 +123,20 @@
             android:id="@+id/recyclerViewScores"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="1dp" />
+            android:paddingBottom="80dp"
+            android:layout_marginTop="1dp"/>
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/appCompatButtonCreateScoreList"
             style="@style/buttonStyle"
-            android:id="@+id/appCompatButtonCreateGame"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/text_create_score" />
 
-    </LinearLayout>
+
+    </RelativeLayout>
+
 </android.support.v7.widget.LinearLayoutCompat>
