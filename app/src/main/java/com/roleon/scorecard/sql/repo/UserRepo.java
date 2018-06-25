@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.roleon.scorecard.model.Score;
 import com.roleon.scorecard.model.User;
 import com.roleon.scorecard.sql.DatabaseManager;
 

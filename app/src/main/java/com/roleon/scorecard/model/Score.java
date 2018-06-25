@@ -6,7 +6,6 @@ public class Score {
     public static final String TABLE = "score";
     // Table Column names
     public static final String KEY_SCORE_ID = "score_id";
-    public static final String KEY_USER_ID = "user_id";
     public static final String KEY_SCORE_NAME = "score_name";
     public static final String KEY_SCORE_TYPE = "score_type";
     public static final String KEY_SCORE_MODE = "score_mode";
@@ -15,7 +14,6 @@ public class Score {
     public static final String KEY_GAME_ID = "game_id";
 
     private int score_id;
-    private int user_id;
     private String score_name;
     private int score_typ;
     private int score_mode;
@@ -29,14 +27,6 @@ public class Score {
 
     public void setScore_Id(int score_id) {
         this.score_id = score_id;
-    }
-
-    public int getUser_Id() {
-        return user_id;
-    }
-
-    public void setUser_Id(int user_id) {
-        this.user_id = user_id;
     }
 
     public String getScore_name() {

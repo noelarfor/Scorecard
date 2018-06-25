@@ -7,18 +7,28 @@
     <string name="text_login">Login</string>
     <string name="text_register">Register</string>
     <string name="text_create_score">Create Game</string>
+    <string name="text_create_game">Create New Game Model</string>
+    <string name="text_create_game_short">Game Init</string>
+    <string name="text_show_gamelist">Show Games</string>
+    <string name="text_create_gamelist">Show Games</string>
 
-    <!-- UserList Activity -->
-    <string name="hint_username">Username</string>
-    <string name="hint_password">Password</string>
-    <string name="hint_date">created at</string>
+    <!-- CreateGame Activity -->
+    <string name="hint_gamename">Name</string>
+    <string name="text_select_number_of">Select The Number Of Points If A Game</string>
+    <string name="text_win_points">Is Won:</string>
+    <string name="text_loss_points">Is Lost:</string>
+    <string name="text_drawn_points">Draws:</string>
+    <string name="error_message_gamename">Enter Valid Name For Game</string>
+    <string name="success_addGame">Game Successfully Added</string>
+    <string name="error_gamename_exists">Name Of Game Already Exists</string>
 
-    <!-- Score Activity -->
-    <string name="hint_scorename">Name</string>
-    <string name="hint_typ">Typ</string>
-    <string name="hint_mode">Mode</string>
-    <string name="hint_last_update">Last update</string>
-    <string name="hint_fifa">Fifa</string>
+    <!-- CreateScore Activity -->
+    <string name="text_select_typ">Select Typ:</string>
+    <string name="text_select_mode">Select Modus:</string>
+    <string name="text_select_users">Select Number Of Users:</string>
+    <string name="error_scorename_exists">Name Of Score Already Exists</string>
+    <string name="error_message_scorename">Enter Valid Name For Score</string>
+    <string name="success_createScore">Score Successfully Added</string>
 
     <!-- Login Register Activity -->
     <string name="text_accounts">List Of All Accounts:</string>
@@ -26,14 +36,31 @@
     <string name="error_message_username">Enter Valid Username</string>
     <string name="error_message_password">Enter Password</string>
     <string name="success_message">Registration Successful</string>
-    <string name="text_not_member">No account yet? Create Account</string>
-    <string name="text_already_member">Already a member? Login</string>
+    <string name="success_message_Add_User">User Successfully Added</string>
+    <string name="text_not_member">No Account Yet? Create Account</string>
+    <string name="text_already_member">Already A Member? Login</string>
     <string name="error_email_exists">Username Already Exists</string>
     <string name="error_password_match">Password Does Not Match</string>
-    <string name="error_valid_username_password">Wrong Username or Password</string>
+    <string name="error_valid_username_password">Wrong Username Or Password</string>
     <string name="text_hello">Welcome,</string>
 
     <!-- ScoreList Activity -->
     <string name="text_scores">List Of All Scores:</string>
+    <string name="hint_scorename">Name</string>
+    <string name="hint_typ">Typ</string>
+    <string name="hint_mode">Mode</string>
+    <string name="hint_last_update">Last Update</string>
+    <string name="hint_num_users">Num Of Users</string>
+
+    <!-- GameList Activity -->
+    <string name="text_games">List Of All Games:</string>
+    <string name="hint_win_points">Win Points</string>
+    <string name="hint_loss_points">Loss Points</string>
+    <string name="hint_drawn_points">Drawn Points</string>
+
+    <!-- UserList Activity -->
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_date">Created At</string>
 
 </resources>

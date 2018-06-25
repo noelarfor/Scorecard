@@ -18,45 +18,36 @@
             android:padding="5dp">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewScoreName"
+                android:id="@+id/textViewGameName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/hint_scorename"
+                android:text="@string/hint_gamename"
                 android:layout_weight="1"
                 android:textColor="@android:color/darker_gray" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewScoreTyp"
+                android:id="@+id/textViewWinPoints"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/hint_typ"
+                android:text="@string/hint_win_points"
                 android:layout_weight="1"
                 android:textColor="@android:color/darker_gray" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewScoreMode"
+                android:id="@+id/textViewLossPoints"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/hint_mode"
                 android:layout_weight="1"
+                android:text="@string/hint_loss_points"
                 android:textColor="@android:color/darker_gray" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewNumUsers"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/hint_mode"
-                android:layout_weight="1"
-                android:textColor="@android:color/darker_gray" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewLastUpdate"
+                android:id="@+id/textViewDrawnPoints"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/hint_last_update"
+                android:text="@string/hint_drawn_points"
                 android:textColor="@android:color/darker_gray" />
-
         </LinearLayout>
 
     </LinearLayout>

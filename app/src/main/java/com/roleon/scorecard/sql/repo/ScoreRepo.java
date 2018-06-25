@@ -15,7 +15,6 @@ public class ScoreRepo {
 
         return "CREATE TABLE " + Score.TABLE + "("
                 + Score.KEY_SCORE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + Score.KEY_USER_ID + " INTEGER,"
                 + Score.KEY_SCORE_NAME + " TEXT,"
                 + Score.KEY_SCORE_TYPE + " INTEGER,"
                 + Score.KEY_SCORE_MODE + " INTEGER,"
@@ -29,7 +28,6 @@ public class ScoreRepo {
 
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
-        values.put(Score.KEY_USER_ID, score.getUser_Id());
         values.put(Score.KEY_SCORE_NAME, score.getScore_name());
         values.put(Score.KEY_SCORE_TYPE, score.getScore_typ());
         values.put(Score.KEY_SCORE_MODE, score.getScore_mode());
@@ -53,12 +51,7 @@ public class ScoreRepo {
         // selection argument
         String[] selectionArgs = {scorename};
 
-        // query user table with condition
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id FROM user WHERE user_email = 'name@domain.com';
-         */
+        // query score table with condition
         Cursor cursor = db.query(Score.TABLE,    //Table to query
                 columns,                        //columns to return
                 selection,                      //columns for the WHERE clause
@@ -80,7 +73,6 @@ public class ScoreRepo {
         // array of columns to fetch
         String[] columns = {
                 Score.KEY_SCORE_ID,
-                Score.KEY_USER_ID,
                 Score.KEY_SCORE_NAME,
                 Score.KEY_SCORE_TYPE,
                 Score.KEY_SCORE_MODE,
@@ -95,12 +87,7 @@ public class ScoreRepo {
 
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
-        // query the user table
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
-         */
+        // query the score table
         Cursor cursor = db.query(Score.TABLE, //Table to query
                 columns,    //columns to return
                 null,        //columns for the WHERE clause
@@ -115,7 +102,6 @@ public class ScoreRepo {
             do {
                 Score score = new Score();
                 score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_ID))));
-                score.setUser_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_USER_ID))));
                 score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
                 score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
                 score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
@@ -148,7 +134,7 @@ public class ScoreRepo {
     public void deleteUser(Score score) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         // delete user record by id
-        db.delete(Score.TABLE, Score.KEY_USER_ID + " = ?",
+        db.delete(Score.TABLE, Score.KEY_SCORE_ID + " = ?",
                 new String[]{String.valueOf(score.getScore_Id())});
         DatabaseManager.getInstance().closeDatabase();
     }

@@ -1,5 +1,6 @@
 package com.roleon.scorecard.activities;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,7 +29,9 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
     private List<Score> listScores;
     private ScoresRecyclerAdapter scoresRecyclerAdapter;
 
-    private AppCompatButton appCompatButtonCreateGame;
+    private AppCompatButton appCompatButtonCreateScoreList;
+    private AppCompatButton appCompatButtonUserList;
+    private AppCompatButton appCompatButtonAddGame;
     private Score score;
 
     @Override
@@ -49,15 +52,19 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
         textViewUserName = (AppCompatTextView) findViewById(R.id.textViewUserName);
         recyclerViewScores = (RecyclerView) findViewById(R.id.recyclerViewScores);
 
-        appCompatButtonCreateGame = (AppCompatButton) findViewById(R.id.appCompatButtonCreateGame);
+        appCompatButtonCreateScoreList = (AppCompatButton) findViewById(R.id.appCompatButtonCreateScoreList);
+        appCompatButtonUserList = (AppCompatButton) findViewById(R.id.appCompatButtonUserList);
+        appCompatButtonAddGame = (AppCompatButton) findViewById(R.id.appCompatButtonAddGame);
     }
 
     /**
      * This method is to initialize listeners
      */
     private void initListeners() {
-        appCompatButtonCreateGame.setOnClickListener(this);
+        appCompatButtonCreateScoreList.setOnClickListener(this);
         recyclerViewScores.setOnClickListener(this);
+        appCompatButtonUserList.setOnClickListener(this);
+        appCompatButtonAddGame.setOnClickListener(this);
         scoresRecyclerAdapter.setClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +75,6 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
                         Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     /**
@@ -103,17 +109,33 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.appCompatButtonCreateGame:
-                Toast.makeText(ScoreListActivity.this, "Create Game",
-                        Toast.LENGTH_SHORT).show();
+            case R.id.appCompatButtonCreateScoreList:
+                createScore();
                 break;
-            /*case R.id.recyclerViewScores:
-                int pos = recyclerViewScores.indexOfChild(v);
-                score = scoresRecyclerAdapter.getItem(pos);
-
-                Toast.makeText(ScoreListActivity.this, "On item clicked" + score.getScore_name(),
-                        Toast.LENGTH_SHORT).show();*/
+            case R.id.appCompatButtonUserList:
+                showUserList();
+                break;
+            case R.id.appCompatButtonAddGame:
+                addGame();
+                break;
         }
+    }
+
+    private void showUserList() {
+        Intent showUserListIntent = new Intent(getApplicationContext(), UsersListActivity.class);
+        showUserListIntent.putExtra("USER_NAME", textViewUserName.getText().toString().trim());
+        startActivity(showUserListIntent);
+    }
+
+    private void createScore() {
+        Intent createScoreIntent = new Intent(getApplicationContext(), CreateScoreActivity.class);
+        createScoreIntent.putExtra("USER_NAME", textViewUserName.getText().toString().trim());
+        startActivity(createScoreIntent);
+    }
+
+    private void addGame() {
+        Intent addGameIntent = new Intent(getApplicationContext(), CreateGameActivity.class);
+        startActivity(addGameIntent);
     }
 
     /**

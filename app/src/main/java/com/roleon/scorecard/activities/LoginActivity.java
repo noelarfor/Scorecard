@@ -31,14 +31,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextInputEditText textInputEditTextPassword;
 
     private AppCompatButton appCompatButtonLogin;
-    private AppCompatButton appCompatButtonUserList;
 
     private AppCompatTextView textViewLinkRegister;
 
     private InputValidation inputValidation;
     private UserRepo userRepo;
-
     private ScoreRepo scoreRepo;
+
+    private int numOfLogin = 1;
+    private boolean isInitLogin = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         textInputEditTextPassword = (TextInputEditText) findViewById(R.id.textInputEditTextPassword);
 
         appCompatButtonLogin = (AppCompatButton) findViewById(R.id.appCompatButtonLogin);
-        appCompatButtonUserList = (AppCompatButton) findViewById(R.id.appCompatButtonUserList);
 
         textViewLinkRegister = (AppCompatTextView) findViewById(R.id.textViewLinkRegister);
 
@@ -76,7 +76,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void initListeners() {
         appCompatButtonLogin.setOnClickListener(this);
-        appCompatButtonUserList.setOnClickListener(this);
         textViewLinkRegister.setOnClickListener(this);
     }
 
@@ -88,7 +87,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         inputValidation = new InputValidation(activity);
         userRepo = new UserRepo();
         scoreRepo = new ScoreRepo();
-    }
+
+        Intent intent = getIntent();
+        if (intent.hasExtra("NUM_LOGIN")) {
+            numOfLogin = intent.getExtras().getInt("NUM_LOGIN");
+            isInitLogin = false;
+            Toast.makeText(LoginActivity.this, "remaining logins: " + numOfLogin,
+                    Toast.LENGTH_SHORT).show();
+        }
+}
 
     /**
      * This implemented method is to listen the click on view
@@ -106,19 +113,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent intentRegister = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intentRegister);
                 break;
-            case R.id.appCompatButtonUserList:
-                showUserList();
-                break;
         }
     }
 
-    private void showUserList() {
-        Intent accountsIntent = new Intent(activity, UsersListActivity.class);
-        accountsIntent.putExtra("USER_NAME", "Admin");
-        startActivity(accountsIntent);
-    }
-
-    /**
+     /**
      * This method is to validate the input text fields and verify login credentials from SQLite
      */
     private void verifyFromSQLite() {
@@ -131,50 +129,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (userRepo.checkUser(textInputEditTextUser.getText().toString().trim()
                 , textInputEditTextPassword.getText().toString().trim())) {
 
-            Toast.makeText(LoginActivity.this, "User and Password match",
-                    Toast.LENGTH_SHORT).show();
-
-            Score score = new Score();
-            score.setScore_name("TestScore1");
-            score.setUser_Id((userRepo.getUser(textInputEditTextUser.getText().toString())).getId());
-            score.setScore_typ(0);
-            score.setScore_mode(0);
-            score.setNum_users(2);
-            score.setGame_id(1);
-            score.setLast_update(AppHelper.getDateTime());
-
-            scoreRepo.addScore(score);
-
-            score.setScore_name("TestScore2");
-            score.setUser_Id((userRepo.getUser(textInputEditTextUser.getText().toString())).getId());
-            score.setScore_typ(0);
-            score.setScore_mode(0);
-            score.setNum_users(2);
-            score.setGame_id(1);
-            score.setLast_update(AppHelper.getDateTime());
-
-            scoreRepo.addScore(score);
-
-            score.setScore_name("TestScore3");
-            score.setUser_Id((userRepo.getUser(textInputEditTextUser.getText().toString())).getId());
-            score.setScore_typ(0);
-            score.setScore_mode(0);
-            score.setNum_users(2);
-            score.setGame_id(1);
-            score.setLast_update(AppHelper.getDateTime());
-
-            scoreRepo.addScore(score);
-
-            if (scoreRepo.checkScore("TestScore3")) {
-                Toast.makeText(LoginActivity.this, "Name already used!",
-                        Toast.LENGTH_SHORT).show();
+            if (isInitLogin) {
+                AppHelper.currentUser = UserRepo.getUser(textInputEditTextUser.getText().toString().trim());
             }
+            // TODO check is user exists in list
+            AppHelper.listUsers.add(AppHelper.currentUser);
 
-            Intent accountsIntent = new Intent(activity, ScoreListActivity.class);
-            accountsIntent.putExtra("USER_NAME", textInputEditTextUser.getText().toString().trim());
-            emptyInputEditText();
-            startActivity(accountsIntent);
-
+            numOfLogin--;
+            if (numOfLogin == 0) {
+                emptyInputEditText();
+                Intent startScoreListActivity = new Intent(activity, ScoreListActivity.class);
+                startScoreListActivity.putExtra("USER_NAME", textInputEditTextUser.getText().toString().trim());
+                startActivity(startScoreListActivity);
+            }
+            else {
+                emptyInputEditText();
+                Snackbar.make(nestedScrollView, getString(R.string.success_message_Add_User), Snackbar.LENGTH_LONG).show();
+            }
 
         } else {
             // Snack Bar to show success message that record is wrong

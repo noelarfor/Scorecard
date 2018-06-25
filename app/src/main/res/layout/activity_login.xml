@@ -53,31 +53,13 @@
                 android:maxLines="1"/>
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <android.support.v7.widget.AppCompatButton
+            style="@style/buttonStyle"
+            android:id="@+id/appCompatButtonLogin"
+            android:layout_marginTop="40dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-
-            <android.support.v7.widget.AppCompatButton
-                style="@style/buttonStyle"
-                android:id="@+id/appCompatButtonLogin"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:text="@string/text_login" />
-
-            <android.support.v7.widget.AppCompatButton
-                style="@style/buttonStyle"
-                android:id="@+id/appCompatButtonUserList"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="10dp"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:text="@string/text_show_userlist" />
-        </android.support.v7.widget.LinearLayoutCompat>
+            android:layout_height="40dp"
+            android:text="@string/text_login" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textViewLinkRegister"

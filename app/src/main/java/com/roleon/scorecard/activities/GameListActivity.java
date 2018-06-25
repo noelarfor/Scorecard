@@ -4,31 +4,29 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.roleon.scorecard.R;
-import com.roleon.scorecard.adapters.UsersRecyclerAdapter;
+import com.roleon.scorecard.adapters.GamesRecyclerAdapter;
 import com.roleon.scorecard.helpers.SimpleDividerItemDecoration;
-import com.roleon.scorecard.model.User;
-import com.roleon.scorecard.sql.repo.UserRepo;
+import com.roleon.scorecard.model.Game;
+import com.roleon.scorecard.sql.repo.GameRepo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersListActivity extends AppCompatActivity {
+public class GameListActivity extends AppCompatActivity {
 
-    private AppCompatTextView textViewName;
-    private RecyclerView recyclerViewUsers;
-    private List<User> listUsers;
-    private UsersRecyclerAdapter usersRecyclerAdapter;
+    private RecyclerView recyclerViewGames;
+    private List<Game> listGames;
+    private GamesRecyclerAdapter gamesRecyclerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_users_list);
+        setContentView(R.layout.activity_games_list);
         getSupportActionBar().hide();
 
         initViews();
@@ -40,29 +38,25 @@ public class UsersListActivity extends AppCompatActivity {
      * This method is to initialize views
      */
     private void initViews() {
-        textViewName = (AppCompatTextView) findViewById(R.id.textViewName);
-        recyclerViewUsers = (RecyclerView) findViewById(R.id.recyclerViewUsers);
+        recyclerViewGames = (RecyclerView) findViewById(R.id.recyclerViewGames);
     }
 
     /**
      * This method is to initialize objects to be used
      */
     private void initObjects() {
-        listUsers = new ArrayList<>();
-        usersRecyclerAdapter = new UsersRecyclerAdapter(listUsers);
+        listGames = new ArrayList<>();
+        gamesRecyclerAdapter = new GamesRecyclerAdapter(listGames);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerViewUsers.setLayoutManager(mLayoutManager);
-        recyclerViewUsers.setItemAnimator(new DefaultItemAnimator());
-        recyclerViewUsers.setHasFixedSize(true);
-        recyclerViewUsers.setAdapter(usersRecyclerAdapter);
+        recyclerViewGames.setLayoutManager(mLayoutManager);
+        recyclerViewGames.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewGames.setHasFixedSize(true);
+        recyclerViewGames.setAdapter(gamesRecyclerAdapter);
 
-        recyclerViewUsers.addItemDecoration(new SimpleDividerItemDecoration(
+        recyclerViewGames.addItemDecoration(new SimpleDividerItemDecoration(
                 getApplicationContext()
         ));
-
-        String userFromIntent = getIntent().getStringExtra("USER_NAME");
-        textViewName.setText(userFromIntent);
 
         getDataFromSQLite();
     }
@@ -77,7 +71,7 @@ public class UsersListActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 //listUsers.clear();
-                listUsers.addAll(UserRepo.getAllUser());
+                listGames.addAll(GameRepo.getAllGame());
 
                 return null;
             }
@@ -85,7 +79,7 @@ public class UsersListActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                usersRecyclerAdapter.notifyDataSetChanged();
+                gamesRecyclerAdapter.notifyDataSetChanged();
             }
         }.execute();
     }

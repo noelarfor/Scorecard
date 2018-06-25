@@ -5,9 +5,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.roleon.scorecard.helpers.AppHelper;
+import com.roleon.scorecard.model.Game;
 import com.roleon.scorecard.model.Score;
 import com.roleon.scorecard.model.User;
 import com.roleon.scorecard.sql.repo.ScoreRepo;
+import com.roleon.scorecard.sql.repo.GameRepo;
 import com.roleon.scorecard.sql.repo.UserRepo;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -28,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(UserRepo.createTable());
         db.execSQL(ScoreRepo.createTable());
-        //db.execSQL(CREATE_RESULT_TABLE);
+        db.execSQL(GameRepo.createTable());
     }
 
     @Override
@@ -38,23 +40,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Drop table if existed, all data will be gone!!!
         db.execSQL("DROP TABLE IF EXISTS " + User.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + Score.TABLE);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULT);
+        db.execSQL("DROP TABLE IF EXISTS " + Game.TABLE);
 
         // Create tables again
         onCreate(db);
     }
 }
-
-    /*
-
-
-    // Result Table Column names
-    private static final String COLUMN_RESULT = "result";
-    private static final String COLUmN_WIN_LOSE = "win_lose";
-
-    // Result table create statement
-    private String CREATE_RESULT_TABLE = "CREATE TABLE " + TABLE_RESULT + "("
-            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COLUMN_RESULT + " INTEGER,"
-            + COLUmN_WIN_LOSE + " TEXT"
-            + ")";*/

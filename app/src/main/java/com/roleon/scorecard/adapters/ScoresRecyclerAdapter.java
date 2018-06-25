@@ -37,20 +37,21 @@ public class ScoresRecyclerAdapter extends RecyclerView.Adapter<ScoresRecyclerAd
         });
 
         return holder;
-        //return new ScoresRecyclerAdapter.ScoreViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ScoresRecyclerAdapter.ScoreViewHolder holder, int position) {
         holder.textViewScoreName.setText(listScores.get(position).getScore_name());
-        holder.textViewScoreTyp.setText(R.string.hint_fifa);
+        holder.textViewScoreTyp.setText(Integer.toString(listScores.get(position).getScore_typ()));
+        //holder.textViewScoreTyp.setText("Fifa");
         holder.textViewScoreMode.setText(R.string.hint_not_implemented);
+        holder.textViewNumUsers.setText(Integer.toString(listScores.get(position).getNum_users()));
         holder.textViewLastUpdate.setText(listScores.get(position).getLast_update());
     }
 
     @Override
     public int getItemCount() {
-        Log.v(ScoresRecyclerAdapter.class.getSimpleName(),""+listScores.size());
+        Log.v(ScoresRecyclerAdapter.class.getSimpleName(),"" + listScores.size());
         return listScores.size();
     }
 
@@ -63,12 +64,14 @@ public class ScoresRecyclerAdapter extends RecyclerView.Adapter<ScoresRecyclerAd
         public AppCompatTextView textViewScoreTyp;
         public AppCompatTextView textViewScoreMode;
         public AppCompatTextView textViewLastUpdate;
+        public AppCompatTextView textViewNumUsers;
 
         public ScoreViewHolder(View view) {
             super(view);
             textViewScoreName = (AppCompatTextView) view.findViewById(R.id.textViewScoreName);
             textViewScoreTyp = (AppCompatTextView) view.findViewById(R.id.textViewScoreTyp);
             textViewScoreMode = (AppCompatTextView) view.findViewById(R.id.textViewScoreMode);
+            textViewNumUsers = (AppCompatTextView) view.findViewById(R.id.textViewNumUsers);
             textViewLastUpdate = (AppCompatTextView) view.findViewById(R.id.textViewLastUpdate);
         }
     }
