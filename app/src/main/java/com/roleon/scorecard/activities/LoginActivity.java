@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.helpers.InputValidation;
-import com.roleon.scorecard.model.Score;
 import com.roleon.scorecard.sql.repo.ScoreRepo;
 import com.roleon.scorecard.sql.repo.UserRepo;
 
@@ -39,7 +38,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ScoreRepo scoreRepo;
 
     private int numOfLogin = 1;
-    private boolean isInitLogin = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +89,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = getIntent();
         if (intent.hasExtra("NUM_LOGIN")) {
             numOfLogin = intent.getExtras().getInt("NUM_LOGIN");
-            isInitLogin = false;
             Toast.makeText(LoginActivity.this, "remaining logins: " + numOfLogin,
                     Toast.LENGTH_SHORT).show();
         }
@@ -129,14 +126,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (userRepo.checkUser(textInputEditTextUser.getText().toString().trim()
                 , textInputEditTextPassword.getText().toString().trim())) {
 
-            if (isInitLogin) {
-                AppHelper.currentUser = UserRepo.getUser(textInputEditTextUser.getText().toString().trim());
+            if (AppHelper.isInit) {
+                AppHelper.currentUser = userRepo.getUser(textInputEditTextUser.getText().toString().trim());
+                AppHelper.isInit = false;
             }
-            // TODO check is user exists in list
-            AppHelper.listUsers.add(AppHelper.currentUser);
+
+            if (!AppHelper.listUsers.contains(userRepo.getUser(textInputEditTextUser.getText().toString().trim()))) {
+                AppHelper.listUsers.add(userRepo.getUser(textInputEditTextUser.getText().toString().trim()));
+            }
 
             numOfLogin--;
-            if (numOfLogin == 0) {
+            if (numOfLogin < 1) {
                 emptyInputEditText();
                 Intent startScoreListActivity = new Intent(activity, ScoreListActivity.class);
                 startScoreListActivity.putExtra("USER_NAME", textInputEditTextUser.getText().toString().trim());

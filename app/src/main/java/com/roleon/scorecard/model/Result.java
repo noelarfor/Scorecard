@@ -8,19 +8,26 @@ public class Result {
     public static final String KEY_RESULT_ID = "result_id";
     public static final String KEY_USER_ID = "user_id";
     public static final String KEY_SCORE_ID = "score_id";
-    public static final String KEY_RESULT_WIN_LOSS = "result_win_loss";
-    public static final String KEY_RESULIT_INFO_1 = "result_info_1";
-    public static final String KEY_RESULIT_INFO_2 = "result_info_2";
-    public static final String KEY_RESULIT_INFO_3 = "result_info_3";
+    public static final String KEY_RESULT_MATCH_ID = "result_match_id";
+    public static final String KEY_RESULT_POINTS = "result_points";
+    public static final String KEY_RESULT_INFO_1 = "result_info_1";
+    public static final String KEY_RESULT_INFO_2 = "result_info_2";
+    public static final String KEY_RESULT_INFO_3 = "result_info_3";
     public static final String KEY_CREATED_AT = "created_at";
 
+    private int result_id;
     private int user_id;
     private int score_id;
-    private int result_win_loss;
+    private int result_match_id;
+    private int result_points;
     private int result_info_1;
     private int result_info_2;
     private int result_info_3;
     private String created_at;
+
+    public int getResult_id() { return result_id; }
+
+    public void setResult_id(int result_id) { this.result_id = result_id; }
 
     public int getUser_id() {
         return user_id;
@@ -38,12 +45,16 @@ public class Result {
         this.score_id = score_id;
     }
 
-    public int getResult_win_loss() {
-        return result_win_loss;
+    public int getResult_match_id() { return result_match_id; }
+
+    public void setResult_match_id(int result_match_id) { this.result_match_id = result_match_id; }
+
+    public int getResult_result_points() {
+        return result_points;
     }
 
-    public void setResult_win_loss(int result_win_loss) {
-        this.result_win_loss = result_win_loss;
+    public void setResult_result_points(int result_points) {
+        this.result_points = result_points;
     }
 
     public int getResult_info_1() {

@@ -70,9 +70,7 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
             public void onClick(View v) {
                 int pos = recyclerViewScores.indexOfChild(v);
                 score = scoresRecyclerAdapter.getItem(pos);
-
-                Toast.makeText(ScoreListActivity.this, "On item clicked" + score.getScore_name(),
-                        Toast.LENGTH_SHORT).show();
+                showResultList(score);
             }
         });
     }
@@ -136,6 +134,12 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
     private void addGame() {
         Intent addGameIntent = new Intent(getApplicationContext(), CreateGameActivity.class);
         startActivity(addGameIntent);
+    }
+
+    private void showResultList(Score score) {
+        Intent showResultIntent = new Intent(getApplicationContext(), CreateGameActivity.class);
+        showResultIntent.putExtra("SCORE_ID", score.getScore_Id());
+        startActivity(showResultIntent);
     }
 
     /**

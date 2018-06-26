@@ -11,6 +11,7 @@
     <string name="text_create_game_short">Game Init</string>
     <string name="text_show_gamelist">Show Games</string>
     <string name="text_create_gamelist">Show Games</string>
+    <string name="text_add_result">Add Result</string>
 
     <!-- CreateGame Activity -->
     <string name="hint_gamename">Name</string>
@@ -51,6 +52,14 @@
     <string name="hint_mode">Mode</string>
     <string name="hint_last_update">Last Update</string>
     <string name="hint_num_users">Num Of Users</string>
+
+    <!-- ResultList Activity -->
+    <string name="text_results">List Of All Results:</string>
+    <string name="hint_win_points_short">W</string>
+    <string name="hint_loss_points_short">L</string>
+    <string name="hint_drawn_points_short">D</string>
+    <string name="hint_diff">Diff</string>
+    <string name="hint_points">Pts</string>
 
     <!-- GameList Activity -->
     <string name="text_games">List Of All Games:</string>

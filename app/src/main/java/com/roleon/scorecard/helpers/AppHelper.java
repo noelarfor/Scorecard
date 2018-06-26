@@ -27,6 +27,7 @@ public class AppHelper extends Application {
 
     public static List<User> listUsers;
     public static User currentUser;
+    public static boolean isInit;
 
 
     @Override
@@ -38,6 +39,7 @@ public class AppHelper extends Application {
         DatabaseManager.initializeInstance(databaseHelper);
         listUsers = new ArrayList<>();
         currentUser = new User();
+        isInit = true;
 
         game = new Game();
         game.setGame_name("Fifa");

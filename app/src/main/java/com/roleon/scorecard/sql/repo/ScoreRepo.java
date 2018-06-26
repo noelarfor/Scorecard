@@ -115,7 +115,7 @@ public class ScoreRepo {
         cursor.close();
         DatabaseManager.getInstance().closeDatabase();
 
-        // return user list
+        // return result list
         return scoreList;
     }
 
@@ -131,7 +131,7 @@ public class ScoreRepo {
         DatabaseManager.getInstance().closeDatabase();
     }
 
-    public void deleteUser(Score score) {
+    public void deleteScore(Score score) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         // delete user record by id
         db.delete(Score.TABLE, Score.KEY_SCORE_ID + " = ?",

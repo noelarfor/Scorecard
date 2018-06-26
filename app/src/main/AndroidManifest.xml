@@ -19,6 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.RegisterActivity"
             android:screenOrientation="portrait" />
@@ -36,6 +37,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.GameListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CreateResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ResultListActivity"
             android:screenOrientation="portrait" />
     </application>
 

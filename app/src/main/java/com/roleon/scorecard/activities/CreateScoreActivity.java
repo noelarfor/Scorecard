@@ -141,10 +141,7 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
         }
         typ = new String[typList.size()];
         typ = typList.toArray(typ);
-
-        String username = getIntent().getStringExtra("USER_NAME");
     }
-
 
     /**
      * This implemented method is to listen the click on view
@@ -202,23 +199,3 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
         textInputEditTextScore.setText(null);
     }
 }
-
-//score.setScore_name("TestScore2");
-//score.setUser_Id((userRepo.getUser(textInputEditTextUser.getText().toString())).getId());
-//score.setScore_typ(0);
-//score.setScore_mode(0);
-//score.setNum_users(2);
-//score.setGame_id(1);
-//score.setLast_update(AppHelper.getDateTime());
-//
-//scoreRepo.addScore(score);
-//
-//score.setScore_name("TestScore3");
-//score.setUser_Id((userRepo.getUser(textInputEditTextUser.getText().toString())).getId());
-//score.setScore_typ(0);
-//score.setScore_mode(0);
-//score.setNum_users(2);
-//score.setGame_id(1);
-//score.setLast_update(AppHelper.getDateTime());
-//
-//scoreRepo.addScore(score);

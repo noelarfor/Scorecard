@@ -53,13 +53,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="40dp"
+                    android:layout_marginEnd="40dp"
                     android:text="@string/text_select_typ"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="40dp"
+                    android:layout_marginEnd="40dp"
                     android:text="@string/text_select_mode"/>
 
                 <TextView
@@ -74,19 +74,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                android:gravity="center">
+                android:gravity="left">
 
                 <NumberPicker
                     android:id="@+id/numberPickerTyp"
-                    android:layout_width="30dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="130dp"
-                    android:layout_marginRight="90dp"/>
+                    android:layout_marginEnd="58dp"/>
 
                 <NumberPicker
                     android:id="@+id/numberPickerMode"
-                    android:layout_width="30dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="130dp"
-                    android:layout_marginRight="90dp"/>
+                    android:layout_marginEnd="70dp"/>
 
                 <NumberPicker
                     android:id="@+id/numberPickerNumberUsers"
