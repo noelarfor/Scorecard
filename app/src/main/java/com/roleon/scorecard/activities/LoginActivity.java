@@ -9,18 +9,15 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.helpers.InputValidation;
-import com.roleon.scorecard.sql.repo.ScoreRepo;
 import com.roleon.scorecard.sql.repo.UserRepo;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private final AppCompatActivity activity = LoginActivity.this;
 
     private NestedScrollView nestedScrollView;
 
@@ -36,7 +33,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private InputValidation inputValidation;
     private UserRepo userRepo;
-    private ScoreRepo scoreRepo;
     private boolean isFromIntent = false;
 
     private int numOfLogin = 1;
@@ -84,9 +80,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void initObjects() {
 
-        inputValidation = new InputValidation(activity);
+        inputValidation = new InputValidation(this);
         userRepo = new UserRepo();
-        scoreRepo = new ScoreRepo();
 
         Intent intent = getIntent();
         if (intent.hasExtra("NUM_LOGIN")) {
@@ -109,7 +104,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 verifyFromSQLite();
                 break;
             case R.id.textViewLinkRegister:
-                // Navigate to RegisterActivity
                 Intent intentRegister = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intentRegister);
                 break;
@@ -136,20 +130,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if (!AppHelper.listUsers.contains(userRepo.getUser(textInputEditTextUser.getText().toString().trim()))) {
                 AppHelper.listUsers.add(userRepo.getUser(textInputEditTextUser.getText().toString().trim()));
-                Log.i("listUsers", "AddUser ");
             }
 
             numOfLogin--;
             if ((numOfLogin < 1) && isFromIntent) {
                 emptyInputEditText();
-                Intent createScoreActivityIntent = new Intent(activity, CreateScoreActivity.class);
+                Intent createScoreActivityIntent = new Intent(getApplicationContext(), CreateScoreActivity.class);
                 startActivity(createScoreActivityIntent);
             }
             else if (numOfLogin < 1){
-                emptyInputEditText();
-                Intent showScoreListActivityIntent = new Intent(activity, ScoreListActivity.class);
+                Intent showScoreListActivityIntent = new Intent(getApplicationContext(), ScoreListActivity.class);
                 showScoreListActivityIntent.putExtra("USER_NAME", textInputEditTextUser.getText().toString().trim());
                 startActivity(showScoreListActivityIntent);
+                emptyInputEditText();
             }
             else {
                 emptyInputEditText();
