@@ -9,9 +9,9 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
-import android.widget.Toast;
 
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.helpers.AppHelper;
@@ -19,6 +19,8 @@ import com.roleon.scorecard.helpers.InputValidation;
 
 import com.roleon.scorecard.model.Game;
 import com.roleon.scorecard.sql.repo.GameRepo;
+import com.roleon.scorecard.model.Result;
+import com.roleon.scorecard.sql.repo.ResultRepo;
 import com.roleon.scorecard.model.Score;
 import com.roleon.scorecard.sql.repo.ScoreRepo;
 
@@ -43,12 +45,17 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
     private InputValidation inputValidation;
     private Score score;
     private ScoreRepo scoreRepo;
-    private List<String> typList = new ArrayList<String>();
+    private List<String> typList;
     private String[] typ;
     private int typIdx = 0;
     private int modeIdx = 0;
-    private int numOfUsers = 1;
+    private int numOfUsers = 2;
+    private Result result;
+    private ResultRepo resultRepo;
+    private String created_at;
+    private int score_id;
 
+    private GameRepo gameRepo;
     private List<Game> listGames;
 
     @Override
@@ -85,8 +92,8 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
         numberPickerMode.setDisplayedValues(mode);
 
         numberPickerNumberUsers = (NumberPicker) findViewById(R.id.numberPickerNumberUsers);
-        numberPickerNumberUsers.setMinValue(1);
-        numberPickerNumberUsers.setMaxValue(6);
+        numberPickerNumberUsers.setMinValue(2);
+        numberPickerNumberUsers.setMaxValue(2);
         numberPickerNumberUsers.setWrapSelectorWheel(false);
         numberPickerNumberUsers.setValue(numOfUsers);
     }
@@ -101,24 +108,18 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
                 typIdx = newVal;
-                String text = "Changed from " + oldVal + " to " + newVal;
-                Toast.makeText(CreateScoreActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         });
         numberPickerMode.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
                 modeIdx = newVal;
-                String text = "Changed from " + oldVal + " to " + newVal;
-                Toast.makeText(CreateScoreActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         });
         numberPickerNumberUsers.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
                 numOfUsers = newVal;
-                String text = "Changed from " + oldVal + " to " + newVal;
-                Toast.makeText(CreateScoreActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -132,15 +133,22 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
         inputValidation = new InputValidation(activity);
         score = new Score();
         scoreRepo = new ScoreRepo();
+        gameRepo = new GameRepo();
 
         listGames = new ArrayList<>();
-        listGames.addAll(GameRepo.getAllGame());
+        listGames.addAll(gameRepo.getAllGame());
 
+        result = new Result();
+        resultRepo = new ResultRepo();
+
+        typList = new ArrayList<>();
         for (int i = 0; i < listGames.size(); i++) {
             typList.add(listGames.get(i).getGame_name());
         }
         typ = new String[typList.size()];
         typ = typList.toArray(typ);
+
+        created_at = new String();
     }
 
     /**
@@ -167,8 +175,12 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
             return;
         }
 
-        if (!scoreRepo.checkScore(textInputEditTextScore.getText().toString().trim())) {
-
+        if (AppHelper.listUsers.size() < numOfUsers) {
+            Intent createScoreIntent = new Intent(activity, LoginActivity.class);
+            createScoreIntent.putExtra("NUM_LOGIN", numOfUsers - 1);
+            startActivity(createScoreIntent);
+        }
+        else if (!scoreRepo.checkScore(textInputEditTextScore.getText().toString().trim())) {
             score.setScore_name(textInputEditTextScore.getText().toString().trim());
             score.setScore_typ(typIdx);
             score.setScore_mode(modeIdx);
@@ -178,13 +190,28 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
 
             scoreRepo.addScore(score);
 
-            // Snack Bar to show success message that record saved successfully
-            Snackbar.make(nestedScrollView, getString(R.string.success_createScore), Snackbar.LENGTH_LONG).show();
-            emptyInputEditText();
+            Log.i("listUsers: ", "numOfUserList " + AppHelper.listUsers.size());
+            for (int i = 0; i < AppHelper.listUsers.size(); i++) {
+                Log.i("listUsers: ", "" + i + "id " + AppHelper.listUsers.get(i).getId());
+            }
 
-            Intent createScoreIntent = new Intent(activity, LoginActivity.class);
-            createScoreIntent.putExtra("NUM_LOGIN", numOfUsers - 1);
-            startActivity(createScoreIntent);
+            score_id = scoreRepo.getScoreByName(textInputEditTextScore.getText().toString().trim()).getScore_Id();
+            created_at = AppHelper.getDateTime();
+            for (int i = 0; i < AppHelper.listUsers.size(); i++) {
+                result.setUser_name(AppHelper.listUsers.get(i).getName());
+                result.setScore_id(score_id);
+                result.setResult_win(0);
+                result.setResult_drawn(0);
+                result.setResult_loss(0);
+                result.setResult_diff(0);
+                result.setCreated_at(created_at);
+
+                resultRepo.addResult(result);
+            }
+
+            Intent showResultIntent = new Intent(getApplicationContext(), ResultListActivity.class);
+            showResultIntent.putExtra("SCORE_ID", Integer.toString(score_id));
+            startActivity(showResultIntent);
 
         } else {
             // Snack Bar to show error message that record already exists

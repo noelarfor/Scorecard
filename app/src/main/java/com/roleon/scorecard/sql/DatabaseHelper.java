@@ -7,9 +7,11 @@ import android.util.Log;
 import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.model.Game;
 import com.roleon.scorecard.model.Score;
+import com.roleon.scorecard.model.Result;
 import com.roleon.scorecard.model.User;
 import com.roleon.scorecard.sql.repo.ScoreRepo;
 import com.roleon.scorecard.sql.repo.GameRepo;
+import com.roleon.scorecard.sql.repo.ResultRepo;
 import com.roleon.scorecard.sql.repo.UserRepo;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -31,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(UserRepo.createTable());
         db.execSQL(ScoreRepo.createTable());
         db.execSQL(GameRepo.createTable());
+        db.execSQL(ResultRepo.createTable());
     }
 
     @Override
@@ -41,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + User.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + Score.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + Game.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + Result.TABLE);
 
         // Create tables again
         onCreate(db);

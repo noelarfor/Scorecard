@@ -15,13 +15,13 @@ public class ResultRepo {
 
         return "CREATE TABLE " + Result.TABLE + "("
                 + Result.KEY_RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + Result.KEY_USER_ID + " INTEGER,"
+                + Result.KEY_USER_NAME + " TEXT,"
                 + Result.KEY_SCORE_ID + " INTEGER,"
-                + Result.KEY_RESULT_MATCH_ID + " INTEGER,"
+                + Result.KEY_RESULT_WIN + " INTEGER,"
+                + Result.KEY_RESULT_DRAWN + " INTEGER,"
+                + Result.KEY_RESULT_LOSS + " INTEGER,"
+                + Result.KEY_RESULT_DIFF + " INTEGER,"
                 + Result.KEY_RESULT_POINTS + " INTEGER,"
-                + Result.KEY_RESULT_INFO_1 + " INTEGER,"
-                + Result.KEY_RESULT_INFO_2 + " INTEGER,"
-                + Result.KEY_RESULT_INFO_3 + " INTEGER,"
                 + Result.KEY_CREATED_AT + " TEXT"
                 + ")";
     }
@@ -30,13 +30,13 @@ public class ResultRepo {
 
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
-        values.put(Result.KEY_USER_ID, result.getUser_id());
+        values.put(Result.KEY_USER_NAME, result.getUser_name());
         values.put(Result.KEY_SCORE_ID, result.getScore_id());
-        values.put(Result.KEY_RESULT_MATCH_ID, result.getResult_match_id());
-        values.put(Result.KEY_RESULT_POINTS, result.getResult_result_points());
-        values.put(Result.KEY_RESULT_INFO_1, result.getResult_info_1());
-        values.put(Result.KEY_RESULT_INFO_2, result.getResult_info_2());
-        values.put(Result.KEY_RESULT_INFO_3, result.getResult_info_3());
+        values.put(Result.KEY_RESULT_WIN, result.getResult_win());
+        values.put(Result.KEY_RESULT_DRAWN, result.getResult_drawn());
+        values.put(Result.KEY_RESULT_LOSS, result.getResult_loss());
+        values.put(Result.KEY_RESULT_DIFF, result.getResult_diff());
+        values.put(Result.KEY_RESULT_POINTS, result.getResult_points());
         values.put(Result.KEY_CREATED_AT, result.getCreated_at());
         // Inserting Row
         db.insert(Result.TABLE, null, values);
@@ -47,13 +47,13 @@ public class ResultRepo {
         // array of columns to fetch
         String[] columns = {
                 Result.KEY_RESULT_ID,
-                Result.KEY_USER_ID,
+                Result.KEY_USER_NAME,
                 Result.KEY_SCORE_ID,
-                Result.KEY_RESULT_MATCH_ID,
+                Result.KEY_RESULT_WIN,
+                Result.KEY_RESULT_DRAWN,
+                Result.KEY_RESULT_LOSS,
+                Result.KEY_RESULT_DIFF,
                 Result.KEY_RESULT_POINTS,
-                Result.KEY_RESULT_INFO_1,
-                Result.KEY_RESULT_INFO_2,
-                Result.KEY_RESULT_INFO_3,
                 Result.KEY_CREATED_AT
         };
         // sorting orders
@@ -77,13 +77,13 @@ public class ResultRepo {
             do {
                 Result result = new Result();
                 result.setResult_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_ID))));
-                result.setUser_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_USER_ID))));
+                result.setUser_name(cursor.getString(cursor.getColumnIndex(Result.KEY_USER_NAME)));
                 result.setScore_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_SCORE_ID))));
-                result.setResult_match_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_MATCH_ID))));
-                result.setResult_result_points(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_POINTS))));
-                result.setResult_info_1(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_INFO_1))));
-                result.setResult_info_2(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_INFO_2))));
-                result.setResult_info_3(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_INFO_3))));
+                result.setResult_win(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_WIN))));
+                result.setResult_drawn(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_DRAWN))));
+                result.setResult_loss(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_LOSS))));
+                result.setResult_diff(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_DIFF))));
+                result.setResult_points(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_POINTS))));
                 result.setCreated_at(cursor.getString(cursor.getColumnIndex(Result.KEY_CREATED_AT)));
                 // Adding user record to list
                 resultList.add(result);
@@ -96,11 +96,147 @@ public class ResultRepo {
         return resultList;
     }
 
-    public void resultUser(Result result) {
+    public void deleteResultUser(Result result) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         // delete user record by id
         db.delete(Result.TABLE, Result.KEY_RESULT_ID + " = ?",
                 new String[]{String.valueOf(result.getResult_id())});
         DatabaseManager.getInstance().closeDatabase();
     }
+
+    public void updateResult(Result result) {
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Result.KEY_RESULT_WIN, result.getResult_win());
+        values.put(Result.KEY_RESULT_DRAWN, result.getResult_drawn());
+        values.put(Result.KEY_RESULT_LOSS, result.getResult_loss());
+        values.put(Result.KEY_RESULT_DIFF, result.getResult_diff());
+        values.put(Result.KEY_RESULT_POINTS, result.getResult_points());
+
+        // updating row
+        db.update(Result.TABLE, values, Result.KEY_RESULT_ID + " = ?",
+                new String[]{String.valueOf(result.getResult_id())});
+        DatabaseManager.getInstance().closeDatabase();
+    }
+
+    public static Result getResult(String user_name, String score_id) {
+        // array of columns to fetch
+        String[] columns = {
+                Result.KEY_RESULT_ID,
+                Result.KEY_USER_NAME,
+                Result.KEY_SCORE_ID,
+                Result.KEY_RESULT_WIN,
+                Result.KEY_RESULT_DRAWN,
+                Result.KEY_RESULT_LOSS,
+                Result.KEY_RESULT_DIFF,
+                Result.KEY_RESULT_POINTS,
+                Result.KEY_CREATED_AT,
+        };
+
+        // selection criteria
+        String selection = Result.KEY_USER_NAME + " = ?" + " and " + Result.KEY_SCORE_ID + " = ?";
+
+        // selection argument
+        String[] selectionArgs = {user_name, score_id};
+
+        Result result = new Result();
+
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
+        // query the score table
+        /**
+         * Here query function is used to fetch records from user table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
+         */
+        Cursor cursor = db.query(Result.TABLE, //Table to query
+                columns,    //columns to return
+                selection,        //columns for the WHERE clause
+                selectionArgs,        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                null); //The sort order
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        result.setResult_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_ID))));
+        result.setUser_name(cursor.getString(cursor.getColumnIndex(Result.KEY_USER_NAME)));
+        result.setScore_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_SCORE_ID))));
+        result.setResult_win(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_WIN))));
+        result.setResult_drawn(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_DRAWN))));
+        result.setResult_loss(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_LOSS))));
+        result.setResult_diff(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_DIFF))));
+        result.setResult_points(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_POINTS))));
+        result.setCreated_at(cursor.getString(cursor.getColumnIndex(Result.KEY_CREATED_AT)));
+        cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
+
+        // return score list
+        return result;
+    }
+
+    public static List<Result> getResultsOfScore(String score_id) {
+        // array of columns to fetch
+        String[] columns = {
+                Result.KEY_RESULT_ID,
+                Result.KEY_USER_NAME,
+                Result.KEY_SCORE_ID,
+                Result.KEY_RESULT_WIN,
+                Result.KEY_RESULT_DRAWN,
+                Result.KEY_RESULT_LOSS,
+                Result.KEY_RESULT_DIFF,
+                Result.KEY_RESULT_POINTS,
+                Result.KEY_CREATED_AT,
+        };
+
+        // selection criteria
+        String selection = Result.KEY_SCORE_ID + " = ?";
+
+        // selection argument
+        String[] selectionArgs = {score_id};
+
+        List<Result> resultList = new ArrayList<Result>();
+
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
+        // query the score table
+        /**
+         * Here query function is used to fetch records from user table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
+         */
+        Cursor cursor = db.query(Result.TABLE, //Table to query
+                columns,    //columns to return
+                selection,        //columns for the WHERE clause
+                selectionArgs,        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                null); //The sort order
+
+        // Traversing through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Result result = new Result();
+                result.setResult_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_ID))));
+                result.setUser_name(cursor.getString(cursor.getColumnIndex(Result.KEY_USER_NAME)));
+                result.setScore_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_SCORE_ID))));
+                result.setResult_win(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_WIN))));
+                result.setResult_drawn(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_DRAWN))));
+                result.setResult_loss(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_LOSS))));
+                result.setResult_diff(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_DIFF))));
+                result.setResult_points(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_POINTS))));
+                result.setCreated_at(cursor.getString(cursor.getColumnIndex(Result.KEY_CREATED_AT)));
+                // Adding user record to list
+                resultList.add(result);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
+
+        // return result list
+        return resultList;
+    }
 }
+

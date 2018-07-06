@@ -8,6 +8,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 public class InputValidation {
     private Context context;
@@ -42,6 +43,18 @@ public class InputValidation {
         return true;
     }
 
+    /*public boolean isNumberEditTextValid(EditText result) {
+        String value = result.getText().toString().trim();
+        if (value.isEmpty()) {
+            return false;
+        } else {
+            for (char c: value.toCharArray())
+                if (!Character.isDigit(c))
+                    return false;
+        }
+
+        return true;
+    }*/
 
     /**
      * method to check InputEditText has valid email .

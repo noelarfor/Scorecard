@@ -37,24 +37,42 @@ public class AppHelper extends Application {
         context = this.getApplicationContext();
         databaseHelper = new DatabaseHelper();
         DatabaseManager.initializeInstance(databaseHelper);
+
         listUsers = new ArrayList<>();
         currentUser = new User();
         isInit = true;
 
-        game = new Game();
-        game.setGame_name("Fifa");
-        game.setWin_points(3);
-        game.setLoss_points(0);
-        game.setDrawn_points(1);
-
-        gameRepo = new GameRepo();
-        gameRepo.addGame(game);
-
         user = new User();
-        user.setName("Admin");
-        user.setPassword("admin");
-        user.setCreated_at(getDateTime());
-        userRepo.addUser(user);
+        userRepo = new UserRepo();
+        game = new Game();
+        gameRepo = new GameRepo();
+
+        if (!gameRepo.checkGame("Fifa")) {
+            game.setGame_name("Fifa");
+            game.setWin_points(3);
+            game.setLoss_points(0);
+            game.setDrawn_points(1);
+            gameRepo.addGame(game);
+        }
+        if (!userRepo.checkUser("Admin")) {
+            user.setName("Admin");
+            user.setPassword("admin");
+            user.setCreated_at(getDateTime());
+            userRepo.addUser(user);
+        }
+        if (!userRepo.checkUser("tu1")) {
+            user.setName("tu1");
+            user.setPassword("tu1");
+            user.setCreated_at(getDateTime());
+            userRepo.addUser(user);
+        }
+        if (!userRepo.checkUser("tu2")) {
+            user.setName("tu2");
+            user.setPassword("tu2");
+            user.setCreated_at(getDateTime());
+            userRepo.addUser(user);
+        }
+
     }
 
     public static Context getContext(){

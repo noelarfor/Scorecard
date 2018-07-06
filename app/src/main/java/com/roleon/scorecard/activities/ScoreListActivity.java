@@ -11,7 +11,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.adapters.ScoresRecyclerAdapter;
@@ -137,8 +136,8 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void showResultList(Score score) {
-        Intent showResultIntent = new Intent(getApplicationContext(), CreateGameActivity.class);
-        showResultIntent.putExtra("SCORE_ID", score.getScore_Id());
+        Intent showResultIntent = new Intent(getApplicationContext(), ResultListActivity.class);
+        showResultIntent.putExtra("SCORE_ID", Integer.toString(score.getScore_Id()));
         startActivity(showResultIntent);
     }
 

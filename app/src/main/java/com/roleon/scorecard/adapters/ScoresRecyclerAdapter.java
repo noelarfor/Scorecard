@@ -43,8 +43,7 @@ public class ScoresRecyclerAdapter extends RecyclerView.Adapter<ScoresRecyclerAd
     public void onBindViewHolder(ScoresRecyclerAdapter.ScoreViewHolder holder, int position) {
         holder.textViewScoreName.setText(listScores.get(position).getScore_name());
         holder.textViewScoreTyp.setText(Integer.toString(listScores.get(position).getScore_typ()));
-        //holder.textViewScoreTyp.setText("Fifa");
-        holder.textViewScoreMode.setText(R.string.hint_not_implemented);
+        holder.textViewScoreMode.setText(Integer.toString(listScores.get(position).getScore_mode()));
         holder.textViewNumUsers.setText(Integer.toString(listScores.get(position).getNum_users()));
         holder.textViewLastUpdate.setText(listScores.get(position).getLast_update());
     }

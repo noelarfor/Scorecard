@@ -6,7 +6,7 @@
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -16,26 +16,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
             android:src="@drawable/scorecard_logo" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_hello" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewUserNameResultList"
-                android:layout_marginStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
 
     </android.support.v7.widget.LinearLayoutCompat>
 
@@ -64,35 +44,35 @@
                 android:textColor="@color/colorPrimary" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:layout_width="30dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="@string/hint_win_points_short"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:layout_width="30dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="@string/hint_drawn_points_short"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:layout_width="30dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="@string/hint_loss_points_short"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:layout_width="30dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="@string/hint_diff"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:layout_width="30dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="@string/hint_points"
                 android:textAlignment="center"
@@ -101,21 +81,30 @@
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewScores"
+            android:id="@+id/recyclerViewResults"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="80dp"
-            android:layout_marginTop="50dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/appCompatButtonAddResult"
             style="@style/buttonStyle"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_above="@id/appCompatButtonShowScoreList"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:text="@string/text_add_result" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/appCompatButtonShowScoreList"
+            style="@style/buttonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/text_show_scorelist" />
 
 
     </RelativeLayout>

@@ -83,7 +83,7 @@ public class GameRepo {
         return gameList;
     }
 
-    public static Game getGame(String gamename) {
+    public static Game getGame(String gameid) {
         // array of columns to fetch
         String[] columns = {
                 Game.KEY_GAME_ID,
@@ -94,10 +94,10 @@ public class GameRepo {
         };
 
         // selection criteria
-        String selection = Game.KEY_GAME_NAME + " = ?";
+        String selection = Game.KEY_GAME_ID + " = ?";
 
         // selection argument
-        String[] selectionArgs = {gamename};
+        String[] selectionArgs = {gameid};
 
         Game game = new Game();
 

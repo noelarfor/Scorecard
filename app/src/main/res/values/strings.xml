@@ -12,6 +12,7 @@
     <string name="text_show_gamelist">Show Games</string>
     <string name="text_create_gamelist">Show Games</string>
     <string name="text_add_result">Add Result</string>
+    <string name="text_show_scorelist">Show Score List</string>
 
     <!-- CreateGame Activity -->
     <string name="hint_gamename">Name</string>
@@ -31,13 +32,16 @@
     <string name="error_message_scorename">Enter Valid Name For Score</string>
     <string name="success_createScore">Score Successfully Added</string>
 
+    <!-- CreateResult Activity -->
+    <string name="text_result">Enter Result:</string>
+
     <!-- Login Register Activity -->
     <string name="text_accounts">List Of All Accounts:</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="error_message_username">Enter Valid Username</string>
     <string name="error_message_password">Enter Password</string>
     <string name="success_message">Registration Successful</string>
-    <string name="success_message_Add_User">User Successfully Added</string>
+    <string name="success_message_Add_User">User Successfully Added, Remaining Logins: </string>
     <string name="text_not_member">No Account Yet? Create Account</string>
     <string name="text_already_member">Already A Member? Login</string>
     <string name="error_email_exists">Username Already Exists</string>

@@ -92,24 +92,18 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
                 winPoints = newVal;
-                String text = "Changed from " + oldVal + " to " + newVal;
-                Toast.makeText(CreateGameActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         });
         numberPickerLossPoints.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
                 lossPoints = newVal;
-                String text = "Changed from " + oldVal + " to " + newVal;
-                Toast.makeText(CreateGameActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         });
         numberPickerDrawnPoints.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
                 drawnPoints = newVal;
-                String text = "Changed from " + oldVal + " to " + newVal;
-                Toast.makeText(CreateGameActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         });
 

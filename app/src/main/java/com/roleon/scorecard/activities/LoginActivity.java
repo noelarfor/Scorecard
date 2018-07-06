@@ -9,6 +9,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private InputValidation inputValidation;
     private UserRepo userRepo;
     private ScoreRepo scoreRepo;
+    private boolean isFromIntent = false;
 
     private int numOfLogin = 1;
 
@@ -89,6 +91,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = getIntent();
         if (intent.hasExtra("NUM_LOGIN")) {
             numOfLogin = intent.getExtras().getInt("NUM_LOGIN");
+            isFromIntent = true;
             Toast.makeText(LoginActivity.this, "remaining logins: " + numOfLogin,
                     Toast.LENGTH_SHORT).show();
         }
@@ -133,18 +136,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if (!AppHelper.listUsers.contains(userRepo.getUser(textInputEditTextUser.getText().toString().trim()))) {
                 AppHelper.listUsers.add(userRepo.getUser(textInputEditTextUser.getText().toString().trim()));
+                Log.i("listUsers", "AddUser ");
             }
 
             numOfLogin--;
-            if (numOfLogin < 1) {
+            if ((numOfLogin < 1) && isFromIntent) {
                 emptyInputEditText();
-                Intent startScoreListActivity = new Intent(activity, ScoreListActivity.class);
-                startScoreListActivity.putExtra("USER_NAME", textInputEditTextUser.getText().toString().trim());
-                startActivity(startScoreListActivity);
+                Intent createScoreActivityIntent = new Intent(activity, CreateScoreActivity.class);
+                startActivity(createScoreActivityIntent);
+            }
+            else if (numOfLogin < 1){
+                emptyInputEditText();
+                Intent showScoreListActivityIntent = new Intent(activity, ScoreListActivity.class);
+                showScoreListActivityIntent.putExtra("USER_NAME", textInputEditTextUser.getText().toString().trim());
+                startActivity(showScoreListActivityIntent);
             }
             else {
                 emptyInputEditText();
-                Snackbar.make(nestedScrollView, getString(R.string.success_message_Add_User), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(nestedScrollView, getString(R.string.success_message_Add_User) + numOfLogin, Snackbar.LENGTH_LONG).show();
             }
 
         } else {

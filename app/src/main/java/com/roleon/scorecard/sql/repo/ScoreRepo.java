@@ -119,6 +119,112 @@ public class ScoreRepo {
         return scoreList;
     }
 
+    public static Score getScoreByName(String scorename) {
+        // array of columns to fetch
+        String[] columns = {
+                Score.KEY_SCORE_ID,
+                Score.KEY_SCORE_NAME,
+                Score.KEY_SCORE_TYPE,
+                Score.KEY_SCORE_MODE,
+                Score.KEY_NUM_USERS,
+                Score.KEY_LAST_UPDDATE,
+                Score.KEY_GAME_ID,
+        };
+
+        // selection criteria
+        String selection = Score.KEY_SCORE_NAME + " = ?";
+
+        // selection argument
+        String[] selectionArgs = {scorename};
+
+        Score score = new Score();
+
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
+        // query the score table
+        /**
+         * Here query function is used to fetch records from user table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
+         */
+        Cursor cursor = db.query(Score.TABLE, //Table to query
+                columns,    //columns to return
+                selection,        //columns for the WHERE clause
+                selectionArgs,        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                null); //The sort order
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_ID))));
+        score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
+        score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
+        score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
+        score.setNum_users(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_NUM_USERS))));
+        score.setLast_update(cursor.getString(cursor.getColumnIndex(Score.KEY_LAST_UPDDATE)));
+        score.setGame_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_GAME_ID))));
+        cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
+
+        // return score list
+        return score;
+    }
+
+    public static Score getScoreById(String score_id) {
+        // array of columns to fetch
+        String[] columns = {
+                Score.KEY_SCORE_ID,
+                Score.KEY_SCORE_NAME,
+                Score.KEY_SCORE_TYPE,
+                Score.KEY_SCORE_MODE,
+                Score.KEY_NUM_USERS,
+                Score.KEY_LAST_UPDDATE,
+                Score.KEY_GAME_ID,
+        };
+
+        // selection criteria
+        String selection = Score.KEY_SCORE_ID + " = ?";
+
+        // selection argument
+        String[] selectionArgs = {score_id};
+
+        Score score = new Score();
+
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
+        // query the score table
+        /**
+         * Here query function is used to fetch records from user table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
+         */
+        Cursor cursor = db.query(Score.TABLE, //Table to query
+                columns,    //columns to return
+                selection,        //columns for the WHERE clause
+                selectionArgs,        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                null); //The sort order
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_ID))));
+        score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
+        score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
+        score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
+        score.setNum_users(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_NUM_USERS))));
+        score.setLast_update(cursor.getString(cursor.getColumnIndex(Score.KEY_LAST_UPDDATE)));
+        score.setGame_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_GAME_ID))));
+        cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
+
+        // return score list
+        return score;
+    }
+
     public void updateScore(Score score) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
