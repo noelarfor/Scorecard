@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.roleon.scorecard.R;
@@ -18,12 +18,14 @@ import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.helpers.SimpleDividerItemDecoration;
 import com.roleon.scorecard.model.Result;
 import com.roleon.scorecard.sql.repo.ResultRepo;
+import com.roleon.scorecard.sql.repo.ScoreRepo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ResultListActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private AppCompatTextView textViewUserNameResultList;
     private RecyclerView recyclerViewResults;
     private List<Result> listResults;
     private ResultsRecyclerAdapter resultsRecyclerAdapter;
@@ -47,7 +49,7 @@ public class ResultListActivity extends AppCompatActivity implements View.OnClic
         recyclerViewResults = (RecyclerView) findViewById(R.id.recyclerViewResults);
         appCompatButtonAddResult = (AppCompatButton) findViewById(R.id.appCompatButtonAddResult);
         appCompatButtonShowScoreList = (AppCompatButton) findViewById(R.id.appCompatButtonShowScoreList);
-
+        textViewUserNameResultList = (AppCompatTextView) findViewById(R.id.textViewUserNameResultList);
     }
 
     private void initListeners() {
@@ -71,7 +73,8 @@ public class ResultListActivity extends AppCompatActivity implements View.OnClic
         ));
 
         scoreIdFromIntend = getIntent().getStringExtra("SCORE_ID");
-        Log.i("ScoreCard", "ScoreId: " + scoreIdFromIntend);
+
+        textViewUserNameResultList.setText(ScoreRepo.getScoreById(scoreIdFromIntend).getScore_name());
         getDataFromSQLite();
     }
 
