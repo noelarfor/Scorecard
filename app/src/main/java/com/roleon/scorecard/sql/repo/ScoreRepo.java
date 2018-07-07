@@ -119,6 +119,64 @@ public class ScoreRepo {
         return scoreList;
     }
 
+    public static List<Score> getAllScoreOfUser(List<String> scoreIdsList) {
+        // array of columns to fetch
+        String[] columns = {
+                Score.KEY_SCORE_ID,
+                Score.KEY_SCORE_NAME,
+                Score.KEY_SCORE_TYPE,
+                Score.KEY_SCORE_MODE,
+                Score.KEY_NUM_USERS,
+                Score.KEY_GAME_ID,
+                Score.KEY_LAST_UPDDATE
+        };
+
+        // selection criteria
+        String selection = Score.KEY_SCORE_ID + " = ?";
+
+        // selection argument
+        String[] selectionArgs = new String[scoreIdsList.size()];
+        selectionArgs = scoreIdsList.toArray(selectionArgs);
+
+        // sorting orders
+        String sortOrder =
+                Score.KEY_LAST_UPDDATE + " DESC";
+
+        List<Score> scoreList = new ArrayList<>();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
+        // query the score table
+        Cursor cursor = db.query(Score.TABLE, //Table to query
+                columns,    //columns to return
+                selection,        //columns for the WHERE clause
+                selectionArgs,        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                sortOrder); //The sort order
+
+
+        // Traversing through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Score score = new Score();
+                score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_ID))));
+                score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
+                score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
+                score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
+                score.setNum_users(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_NUM_USERS))));
+                score.setGame_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_GAME_ID))));
+                score.setLast_update(cursor.getString(cursor.getColumnIndex(Score.KEY_LAST_UPDDATE)));
+                // Adding user record to list
+                scoreList.add(score);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
+
+        // return result list
+        return scoreList;
+    }
+
     public static Score getScoreByName(String scorename) {
         // array of columns to fetch
         String[] columns = {

@@ -50,7 +50,7 @@
     <string name="text_hello">Welcome,</string>
 
     <!-- ScoreList Activity -->
-    <string name="text_scores">List Of All Scores:</string>
+    <string name="text_scores">List Of Your Scores:</string>
     <string name="hint_scorename">Name</string>
     <string name="hint_typ">Typ</string>
     <string name="hint_mode">Mode</string>
@@ -58,7 +58,7 @@
     <string name="hint_num_users">Num Of Users</string>
 
     <!-- ResultList Activity -->
-    <string name="text_results">List Of All Results:</string>
+    <string name="text_results">List Of All Results Of</string>
     <string name="hint_win_points_short">W</string>
     <string name="hint_loss_points_short">L</string>
     <string name="hint_drawn_points_short">D</string>

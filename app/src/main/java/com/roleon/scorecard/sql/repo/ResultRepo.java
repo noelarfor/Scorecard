@@ -120,61 +120,43 @@ public class ResultRepo {
         DatabaseManager.getInstance().closeDatabase();
     }
 
-    public static Result getResult(String user_name, String score_id) {
+    public static List<String> getScoreIdsOfUser(String user_name) {
         // array of columns to fetch
         String[] columns = {
-                Result.KEY_RESULT_ID,
                 Result.KEY_USER_NAME,
                 Result.KEY_SCORE_ID,
-                Result.KEY_RESULT_WIN,
-                Result.KEY_RESULT_DRAWN,
-                Result.KEY_RESULT_LOSS,
-                Result.KEY_RESULT_DIFF,
-                Result.KEY_RESULT_POINTS,
                 Result.KEY_CREATED_AT,
         };
 
         // selection criteria
-        String selection = Result.KEY_USER_NAME + " = ?" + " and " + Result.KEY_SCORE_ID + " = ?";
+        String selection = Result.KEY_USER_NAME + " = ?";
 
         // selection argument
-        String[] selectionArgs = {user_name, score_id};
+        String[] selectionArgs = {user_name};
 
-        Result result = new Result();
+        // sorting orders
+        String sortOrder = Result.KEY_CREATED_AT + " DESC";
 
+        List<String> scoreIdsList = new ArrayList<>();
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
-        // query the score table
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
-         */
         Cursor cursor = db.query(Result.TABLE, //Table to query
                 columns,    //columns to return
                 selection,        //columns for the WHERE clause
                 selectionArgs,        //The values for the WHERE clause
                 null,       //group the rows
                 null,       //filter by row groups
-                null); //The sort order
+                sortOrder); //The sort order
 
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        result.setResult_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_ID))));
-        result.setUser_name(cursor.getString(cursor.getColumnIndex(Result.KEY_USER_NAME)));
-        result.setScore_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_SCORE_ID))));
-        result.setResult_win(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_WIN))));
-        result.setResult_drawn(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_DRAWN))));
-        result.setResult_loss(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_LOSS))));
-        result.setResult_diff(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_DIFF))));
-        result.setResult_points(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_POINTS))));
-        result.setCreated_at(cursor.getString(cursor.getColumnIndex(Result.KEY_CREATED_AT)));
+        if (cursor.moveToFirst()) {
+            do {
+                scoreIdsList.add(cursor.getString(cursor.getColumnIndex(Result.KEY_SCORE_ID)));
+            } while (cursor.moveToNext());
+        }
         cursor.close();
         DatabaseManager.getInstance().closeDatabase();
 
-        // return score list
-        return result;
+        return scoreIdsList;
     }
 
     public static List<Result> getResultsOfScore(String score_id) {

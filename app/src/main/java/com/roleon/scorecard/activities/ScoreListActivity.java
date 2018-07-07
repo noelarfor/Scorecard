@@ -16,6 +16,7 @@ import com.roleon.scorecard.R;
 import com.roleon.scorecard.adapters.ScoresRecyclerAdapter;
 import com.roleon.scorecard.helpers.SimpleDividerItemDecoration;
 import com.roleon.scorecard.model.Score;
+import com.roleon.scorecard.sql.repo.ResultRepo;
 import com.roleon.scorecard.sql.repo.ScoreRepo;
 
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
     private AppCompatButton appCompatButtonUserList;
     private AppCompatButton appCompatButtonAddGame;
     private Score score;
+
+    private List<String> scoreIdsOfUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,7 +97,7 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
 
         String userFromIntent = getIntent().getStringExtra("USER_NAME");
         textViewUserName.setText(userFromIntent);
-
+        scoreIdsOfUser = ResultRepo.getScoreIdsOfUser(userFromIntent);
         getDataFromSQLite();
     }
 
@@ -151,7 +154,8 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
             @Override
             protected Void doInBackground(Void... params) {
                 listScores.clear();
-                listScores.addAll(ScoreRepo.getAllScore());
+                listScores.addAll(ScoreRepo.getAllScoreOfUser(scoreIdsOfUser));
+                //listScores.addAll(ScoreRepo.getAllScore());
 
                 return null;
             }
