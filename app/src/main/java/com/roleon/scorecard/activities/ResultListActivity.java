@@ -90,6 +90,15 @@ public class ResultListActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!AppHelper.shouldAllowOnBackPressed) {
+            // do nothing
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void addResult() {
         Intent addResultIntent = new Intent(getApplicationContext(), CreateResultActivity.class);
         addResultIntent.putExtra("SCORE_ID", scoreIdFromIntend);

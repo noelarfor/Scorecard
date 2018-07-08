@@ -186,5 +186,6 @@ public class CreateResultActivity extends AppCompatActivity implements View.OnCl
         Intent showResultListIntent = new Intent(activity, ResultListActivity.class);
         showResultListIntent.putExtra("SCORE_ID", scoreIdFromIntend);
         startActivity(showResultListIntent);
+        finish();
     }
 }

@@ -11,9 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.widget.NumberPicker;
 import android.view.View;
-import android.widget.Toast;
 
 import com.roleon.scorecard.R;
+import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.helpers.InputValidation;
 import com.roleon.scorecard.model.Game;
 import com.roleon.scorecard.sql.repo.GameRepo;
@@ -27,7 +27,6 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
     private TextInputLayout textInputLayoutGame;
     private TextInputEditText textInputEditTextGame;
 
-    private AppCompatButton appCompatButtonCreateGame;
     private AppCompatButton appCompatButtonGameList;
     private NumberPicker numberPickerWinPoints;
     private NumberPicker numberPickerLossPoints;
@@ -51,15 +50,11 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
         initListeners();
     }
 
-    /**
-     * This method is to initialize views
-     */
     private void initViews() {
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
 
         textInputLayoutGame = (TextInputLayout) findViewById(R.id.textInputLayoutGame);
         textInputEditTextGame = (TextInputEditText) findViewById(R.id.textInputEditTextGame);
-        appCompatButtonCreateGame = (AppCompatButton) findViewById(R.id.appCompatButtonCreateGame);
         appCompatButtonGameList = (AppCompatButton) findViewById(R.id.appCompatButtonGameList);
 
         numberPickerWinPoints = (NumberPicker) findViewById(R.id.numberPickerWinPoints);
@@ -81,11 +76,7 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
         numberPickerDrawnPoints.setValue(drawnPoints);
     }
 
-    /**
-     * This method is to initialize listeners
-     */
     private void initListeners() {
-        appCompatButtonCreateGame.setOnClickListener(this);
         appCompatButtonGameList.setOnClickListener(this);
 
         numberPickerWinPoints.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -109,9 +100,6 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    /**
-     * This method is to initialize objects to be used
-     */
     private void initObjects() {
 
         inputValidation = new InputValidation(activity);
@@ -120,33 +108,25 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-
-    /**
-     * This implemented method is to listen the click on view
-     *
-     * @param v
-     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.appCompatButtonCreateGame:
-                postDataToSQLite();
-                break;
             case R.id.appCompatButtonGameList:
-                showGameList();
+                postDataToSQLite();
                 break;
         }
     }
 
-    private void showGameList() {
-        Intent showGameListIntent = new Intent(getApplicationContext(), GameListActivity.class);
-        startActivity(showGameListIntent);
+    @Override
+    public void onBackPressed() {
+        if (!AppHelper.shouldAllowOnBackPressed) {
+            // do nothing
+        } else {
+            super.onBackPressed();
+        }
     }
 
-    /**
-     * This method is to validate the input text fields and post data to SQLite
-     */
     private void postDataToSQLite() {
         if (!inputValidation.isInputEditTextFilled(textInputEditTextGame, textInputLayoutGame, getString(R.string.error_message_gamename))) {
             return;
@@ -164,16 +144,17 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
             // Snack Bar to show success message that record saved successfully
             Snackbar.make(nestedScrollView, getString(R.string.success_addGame), Snackbar.LENGTH_LONG).show();
             emptyInputEditText();
+            Intent showGameListIntent = new Intent(getApplicationContext(), GameListActivity.class);
+            startActivity(showGameListIntent);
+            finish();
 
         } else {
             // Snack Bar to show error message that record already exists
             Snackbar.make(nestedScrollView, getString(R.string.error_gamename_exists), Snackbar.LENGTH_LONG).show();
+            return;
         }
     }
 
-    /**
-     * This method is to empty all input edit text
-     */
     private void emptyInputEditText() {
         textInputEditTextGame.setText(null);
     }

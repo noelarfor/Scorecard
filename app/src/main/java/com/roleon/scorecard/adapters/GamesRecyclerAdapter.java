@@ -43,9 +43,6 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
         return listGames.size();
     }
 
-    /**
-     * ViewHolder class
-     */
     public class GameViewHolder extends RecyclerView.ViewHolder {
 
         public AppCompatTextView textViewGameName;

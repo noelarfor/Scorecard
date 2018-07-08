@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.helpers.AppHelper;
@@ -48,9 +47,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initObjects();
     }
 
-    /**
-     * This method is to initialize views
-     */
     private void initViews() {
 
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
@@ -67,17 +63,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    /**
-     * This method is to initialize listeners
-     */
     private void initListeners() {
         appCompatButtonLogin.setOnClickListener(this);
         textViewLinkRegister.setOnClickListener(this);
     }
 
-    /**
-     * This method is to initialize objects to be used
-     */
     private void initObjects() {
 
         inputValidation = new InputValidation(this);
@@ -87,20 +77,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (intent.hasExtra("NUM_LOGIN")) {
             numOfLogin = intent.getExtras().getInt("NUM_LOGIN");
             isFromIntent = true;
-            Toast.makeText(LoginActivity.this, "remaining logins: " + numOfLogin,
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(nestedScrollView, numOfLogin + " " + getString(R.string.text_remaining_login), Snackbar.LENGTH_LONG).show();
         }
 }
 
-    /**
-     * This implemented method is to listen the click on view
-     *
-     * @param v
-     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.appCompatButtonLogin:
+                AppHelper.hideKeyboard(this);
                 verifyFromSQLite();
                 break;
             case R.id.textViewLinkRegister:
@@ -110,9 +95,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-     /**
-     * This method is to validate the input text fields and verify login credentials from SQLite
-     */
+    @Override
+    public void onBackPressed() {
+        if (!AppHelper.shouldAllowOnBackPressed) {
+            // do nothing
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void verifyFromSQLite() {
         if (!inputValidation.isInputEditTextFilled(textInputEditTextUser, textInputLayoutUser, getString(R.string.error_message_username))) {
             return;
@@ -128,21 +119,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 AppHelper.isInit = false;
             }
 
-            if (!AppHelper.listUsers.contains(userRepo.getUser(textInputEditTextUser.getText().toString().trim()))) {
-                AppHelper.listUsers.add(userRepo.getUser(textInputEditTextUser.getText().toString().trim()));
+            for (int i = 0; i < AppHelper.listUsers.size(); i++) {
+                if (AppHelper.listUsers.get(i).getId() == userRepo.getUser(textInputEditTextUser.getText().toString().trim()).getId()) {
+                    emptyInputEditText();
+                    Snackbar.make(nestedScrollView, getString(R.string.text_user_already_logged_in), Snackbar.LENGTH_LONG).show();
+                    return;
+                }
             }
 
+            AppHelper.listUsers.add(userRepo.getUser(textInputEditTextUser.getText().toString().trim()));
             numOfLogin--;
             if ((numOfLogin < 1) && isFromIntent) {
                 emptyInputEditText();
                 Intent createScoreActivityIntent = new Intent(getApplicationContext(), CreateScoreActivity.class);
                 startActivity(createScoreActivityIntent);
+                finish();
             }
             else if (numOfLogin < 1){
                 Intent showScoreListActivityIntent = new Intent(getApplicationContext(), ScoreListActivity.class);
                 showScoreListActivityIntent.putExtra("USER_NAME", textInputEditTextUser.getText().toString().trim());
                 startActivity(showScoreListActivityIntent);
                 emptyInputEditText();
+                finish();
             }
             else {
                 emptyInputEditText();
@@ -155,9 +153,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    /**
-     * This method is to empty all input edit text
-     */
     private void emptyInputEditText() {
         textInputEditTextUser.setText(null);
         textInputEditTextPassword.setText(null);

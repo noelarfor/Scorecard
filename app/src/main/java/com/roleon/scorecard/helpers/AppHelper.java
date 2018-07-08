@@ -1,7 +1,10 @@
 package com.roleon.scorecard.helpers;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.roleon.scorecard.model.User;
 import com.roleon.scorecard.sql.repo.UserRepo;
@@ -28,6 +31,8 @@ public class AppHelper extends Application {
     public static List<User> listUsers;
     public static User currentUser;
     public static boolean isInit;
+    public static boolean shouldAllowOnBackPressed;
+    public static String gameName;
 
 
     @Override
@@ -41,6 +46,7 @@ public class AppHelper extends Application {
         listUsers = new ArrayList<>();
         currentUser = new User();
         isInit = true;
+        shouldAllowOnBackPressed = false;
 
         user = new User();
         userRepo = new UserRepo();
@@ -81,11 +87,20 @@ public class AppHelper extends Application {
 
     public static String getDateTime() {
 
-        //SimpleDateFormat dateFormat = new SimpleDateFormat(
-        //        "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
 

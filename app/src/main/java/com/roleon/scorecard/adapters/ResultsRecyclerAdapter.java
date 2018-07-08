@@ -46,9 +46,6 @@ public class ResultsRecyclerAdapter extends RecyclerView.Adapter<ResultsRecycler
         return listResults.size();
     }
 
-    /**
-     * ViewHolder class
-     */
     public class ResultViewHolder extends RecyclerView.ViewHolder {
 
         public AppCompatTextView textViewUserNameResultList;

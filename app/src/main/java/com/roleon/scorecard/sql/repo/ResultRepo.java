@@ -184,12 +184,7 @@ public class ResultRepo {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         // query the score table
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
-         */
-        Cursor cursor = db.query(Result.TABLE, //Table to query
+         Cursor cursor = db.query(Result.TABLE, //Table to query
                 columns,    //columns to return
                 selection,        //columns for the WHERE clause
                 selectionArgs,        //The values for the WHERE clause

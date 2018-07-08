@@ -54,9 +54,6 @@ public class ScoresRecyclerAdapter extends RecyclerView.Adapter<ScoresRecyclerAd
         return listScores.size();
     }
 
-    /**
-     * ViewHolder class
-     */
     public class ScoreViewHolder extends RecyclerView.ViewHolder {
 
         public AppCompatTextView textViewScoreName;

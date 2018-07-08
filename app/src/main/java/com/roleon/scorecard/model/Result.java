@@ -2,9 +2,8 @@ package com.roleon.scorecard.model;
 
 public class Result {
 
-    public static final String TAG = Result.class.getSimpleName();
     public static final String TABLE = "result";
-    //Table Columns names
+
     public static final String KEY_RESULT_ID = "result_id";
     public static final String KEY_USER_NAME = "user_name";
     public static final String KEY_SCORE_ID = "score_id";

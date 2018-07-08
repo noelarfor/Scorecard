@@ -60,7 +60,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
-                android:text="@string/text_create_game_short" />
+                android:text="@string/text_init_game" />
         </android.support.v7.widget.LinearLayoutCompat>
 
     </android.support.v7.widget.LinearLayoutCompat>

@@ -12,13 +12,6 @@ import java.util.List;
 
 public class UserRepo {
 
-    /*private User user;
-
-    public UserRepo() {
-
-        user = new User();
-    }*/
-
     public static String createTable() {
 
         return "CREATE TABLE " + User.TABLE + "("
@@ -58,11 +51,6 @@ public class UserRepo {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         // query the user table
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
-         */
         Cursor cursor = db.query(User.TABLE, //Table to query
                 columns,    //columns to return
                 null,        //columns for the WHERE clause
@@ -111,11 +99,6 @@ public class UserRepo {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         // query the user table
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
-         */
         Cursor cursor = db.query(User.TABLE, //Table to query
                 columns,    //columns to return
                 selection,        //columns for the WHERE clause
@@ -173,11 +156,6 @@ public class UserRepo {
         String[] selectionArgs = {user};
 
         // query user table with condition
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id FROM user WHERE user_email = 'name@domain.com';
-         */
         Cursor cursor = db.query(User.TABLE,    //Table to query
                 columns,                        //columns to return
                 selection,                      //columns for the WHERE clause
@@ -208,11 +186,6 @@ public class UserRepo {
         String[] selectionArgs = {user, password};
 
         // query user table with conditions
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id FROM user WHERE user_email = 'name@domain.com' AND user_password = 'qwerty';
-         */
         Cursor cursor = db.query(User.TABLE,    //Table to query
                 columns,                        //columns to return
                 selection,                      //columns for the WHERE clause

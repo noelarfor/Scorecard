@@ -9,9 +9,9 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.helpers.AppHelper;
@@ -69,14 +69,14 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
         initListeners();
     }
 
-    /**
-     * This method is to initialize views
-     */
     private void initViews() {
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
 
         textInputLayoutScore = (TextInputLayout) findViewById(R.id.textInputLayoutScore);
         textInputEditTextScore = (TextInputEditText) findViewById(R.id.textInputEditTextScore);
+        if (AppHelper.gameName != null) {
+            textInputEditTextScore.setText(AppHelper.gameName, TextView.BufferType.EDITABLE);
+        }
         appCompatButtonCreateScore = (AppCompatButton) findViewById(R.id.appCompatButtonCreateScore);
 
         numberPickerTyp = (NumberPicker) findViewById(R.id.numberPickerTyp);
@@ -98,9 +98,6 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
         numberPickerNumberUsers.setValue(numOfUsers);
     }
 
-    /**
-     * This method is to initialize listeners
-     */
     private void initListeners() {
         appCompatButtonCreateScore.setOnClickListener(this);
 
@@ -125,9 +122,6 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    /**
-     * This method is to initialize objects to be used
-     */
     private void initObjects() {
 
         inputValidation = new InputValidation(activity);
@@ -151,29 +145,23 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
         created_at = new String();
     }
 
-    /**
-     * This implemented method is to listen the click on view
-     *
-     * @param v
-     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
             case R.id.appCompatButtonCreateScore:
                 postDataToSQLite();
+                finish();
                 break;
 
         }
     }
 
-    /**
-     * This method is to validate the input text fields and post data to SQLite
-     */
     private void postDataToSQLite() {
         if (!inputValidation.isInputEditTextFilled(textInputEditTextScore, textInputLayoutScore, getString(R.string.error_message_scorename))) {
             return;
         }
+        AppHelper.gameName = textInputEditTextScore.getText().toString();
 
         if (AppHelper.listUsers.size() < numOfUsers) {
             Intent createScoreIntent = new Intent(activity, LoginActivity.class);
@@ -189,11 +177,6 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
             score.setLast_update(AppHelper.getDateTime());
 
             scoreRepo.addScore(score);
-
-            Log.i("listUsers: ", "numOfUserList " + AppHelper.listUsers.size());
-            for (int i = 0; i < AppHelper.listUsers.size(); i++) {
-                Log.i("listUsers: ", "" + i + "id " + AppHelper.listUsers.get(i).getId());
-            }
 
             score_id = scoreRepo.getScoreByName(textInputEditTextScore.getText().toString().trim()).getScore_Id();
             created_at = AppHelper.getDateTime();
@@ -212,17 +195,10 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
             Intent showResultIntent = new Intent(getApplicationContext(), ResultListActivity.class);
             showResultIntent.putExtra("SCORE_ID", Integer.toString(score_id));
             startActivity(showResultIntent);
-
+            AppHelper.listUsers.remove(AppHelper.listUsers.size() - 1);
         } else {
             // Snack Bar to show error message that record already exists
             Snackbar.make(nestedScrollView, getString(R.string.error_scorename_exists), Snackbar.LENGTH_LONG).show();
         }
-    }
-
-    /**
-     * This method is to empty all input edit text
-     */
-    private void emptyInputEditText() {
-        textInputEditTextScore.setText(null);
     }
 }

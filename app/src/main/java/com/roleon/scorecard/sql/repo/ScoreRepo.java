@@ -10,11 +10,13 @@ import com.roleon.scorecard.sql.DatabaseManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.roleon.scorecard.model.Score.KEY_SCORE_ID;
+
 public class ScoreRepo {
     public static String createTable() {
 
         return "CREATE TABLE " + Score.TABLE + "("
-                + Score.KEY_SCORE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_SCORE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + Score.KEY_SCORE_NAME + " TEXT,"
                 + Score.KEY_SCORE_TYPE + " INTEGER,"
                 + Score.KEY_SCORE_MODE + " INTEGER,"
@@ -42,7 +44,7 @@ public class ScoreRepo {
     public static boolean checkScore(String scorename) {
 
         // array of columns to fetch
-        String[] columns = {Score.KEY_SCORE_ID};
+        String[] columns = {KEY_SCORE_ID};
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         // selection criteria
@@ -72,7 +74,7 @@ public class ScoreRepo {
     public static List<Score> getAllScore() {
         // array of columns to fetch
         String[] columns = {
-                Score.KEY_SCORE_ID,
+                KEY_SCORE_ID,
                 Score.KEY_SCORE_NAME,
                 Score.KEY_SCORE_TYPE,
                 Score.KEY_SCORE_MODE,
@@ -101,65 +103,7 @@ public class ScoreRepo {
         if (cursor.moveToFirst()) {
             do {
                 Score score = new Score();
-                score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_ID))));
-                score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
-                score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
-                score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
-                score.setNum_users(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_NUM_USERS))));
-                score.setGame_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_GAME_ID))));
-                score.setLast_update(cursor.getString(cursor.getColumnIndex(Score.KEY_LAST_UPDDATE)));
-                // Adding user record to list
-                scoreList.add(score);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        DatabaseManager.getInstance().closeDatabase();
-
-        // return result list
-        return scoreList;
-    }
-
-    public static List<Score> getAllScoreOfUser(List<String> scoreIdsList) {
-        // array of columns to fetch
-        String[] columns = {
-                Score.KEY_SCORE_ID,
-                Score.KEY_SCORE_NAME,
-                Score.KEY_SCORE_TYPE,
-                Score.KEY_SCORE_MODE,
-                Score.KEY_NUM_USERS,
-                Score.KEY_GAME_ID,
-                Score.KEY_LAST_UPDDATE
-        };
-
-        // selection criteria
-        String selection = Score.KEY_SCORE_ID + " = ?";
-
-        // selection argument
-        String[] selectionArgs = new String[scoreIdsList.size()];
-        selectionArgs = scoreIdsList.toArray(selectionArgs);
-
-        // sorting orders
-        String sortOrder =
-                Score.KEY_LAST_UPDDATE + " DESC";
-
-        List<Score> scoreList = new ArrayList<>();
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-
-        // query the score table
-        Cursor cursor = db.query(Score.TABLE, //Table to query
-                columns,    //columns to return
-                selection,        //columns for the WHERE clause
-                selectionArgs,        //The values for the WHERE clause
-                null,       //group the rows
-                null,       //filter by row groups
-                sortOrder); //The sort order
-
-
-        // Traversing through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Score score = new Score();
-                score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_ID))));
+                score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_SCORE_ID))));
                 score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
                 score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
                 score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
@@ -180,7 +124,7 @@ public class ScoreRepo {
     public static Score getScoreByName(String scorename) {
         // array of columns to fetch
         String[] columns = {
-                Score.KEY_SCORE_ID,
+                KEY_SCORE_ID,
                 Score.KEY_SCORE_NAME,
                 Score.KEY_SCORE_TYPE,
                 Score.KEY_SCORE_MODE,
@@ -200,11 +144,6 @@ public class ScoreRepo {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         // query the score table
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
-         */
         Cursor cursor = db.query(Score.TABLE, //Table to query
                 columns,    //columns to return
                 selection,        //columns for the WHERE clause
@@ -216,7 +155,7 @@ public class ScoreRepo {
         if (cursor != null)
             cursor.moveToFirst();
 
-        score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_ID))));
+        score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_SCORE_ID))));
         score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
         score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
         score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
@@ -233,7 +172,7 @@ public class ScoreRepo {
     public static Score getScoreById(String score_id) {
         // array of columns to fetch
         String[] columns = {
-                Score.KEY_SCORE_ID,
+                KEY_SCORE_ID,
                 Score.KEY_SCORE_NAME,
                 Score.KEY_SCORE_TYPE,
                 Score.KEY_SCORE_MODE,
@@ -243,7 +182,7 @@ public class ScoreRepo {
         };
 
         // selection criteria
-        String selection = Score.KEY_SCORE_ID + " = ?";
+        String selection = KEY_SCORE_ID + " = ?";
 
         // selection argument
         String[] selectionArgs = {score_id};
@@ -253,11 +192,6 @@ public class ScoreRepo {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         // query the score table
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
-         */
         Cursor cursor = db.query(Score.TABLE, //Table to query
                 columns,    //columns to return
                 selection,        //columns for the WHERE clause
@@ -269,7 +203,7 @@ public class ScoreRepo {
         if (cursor != null)
             cursor.moveToFirst();
 
-        score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_ID))));
+        score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_SCORE_ID))));
         score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
         score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
         score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
@@ -290,7 +224,7 @@ public class ScoreRepo {
         values.put(Score.KEY_LAST_UPDDATE, score.getLast_update());
 
         // updating row
-        db.update(Score.TABLE, values, Score.KEY_SCORE_ID + " = ?",
+        db.update(Score.TABLE, values, KEY_SCORE_ID + " = ?",
                 new String[]{String.valueOf(score.getScore_Id())});
         DatabaseManager.getInstance().closeDatabase();
     }
@@ -298,7 +232,7 @@ public class ScoreRepo {
     public void deleteScore(Score score) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         // delete user record by id
-        db.delete(Score.TABLE, Score.KEY_SCORE_ID + " = ?",
+        db.delete(Score.TABLE, KEY_SCORE_ID + " = ?",
                 new String[]{String.valueOf(score.getScore_Id())});
         DatabaseManager.getInstance().closeDatabase();
     }

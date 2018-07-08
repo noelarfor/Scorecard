@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.adapters.ScoresRecyclerAdapter;
+import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.helpers.SimpleDividerItemDecoration;
 import com.roleon.scorecard.model.Score;
 import com.roleon.scorecard.sql.repo.ResultRepo;
@@ -35,6 +36,7 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
     private Score score;
 
     private List<String> scoreIdsOfUser;
+    String userFromIntent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,9 +49,6 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
         initListeners();
     }
 
-    /**
-     * This method is to initialize views
-     */
     private void initViews() {
         textViewUserName = (AppCompatTextView) findViewById(R.id.textViewUserName);
         recyclerViewScores = (RecyclerView) findViewById(R.id.recyclerViewScores);
@@ -59,9 +58,6 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
         appCompatButtonAddGame = (AppCompatButton) findViewById(R.id.appCompatButtonAddGame);
     }
 
-    /**
-     * This method is to initialize listeners
-     */
     private void initListeners() {
         appCompatButtonCreateScoreList.setOnClickListener(this);
         recyclerViewScores.setOnClickListener(this);
@@ -73,13 +69,11 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
                 int pos = recyclerViewScores.indexOfChild(v);
                 score = scoresRecyclerAdapter.getItem(pos);
                 showResultList(score);
+                finish();
             }
         });
     }
 
-    /**
-     * This method is to initialize objects to be used
-     */
     private void initObjects() {
         listScores = new ArrayList<>();
         scoresRecyclerAdapter = new ScoresRecyclerAdapter(listScores);
@@ -95,17 +89,18 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
                 getApplicationContext()
         ));
 
-        String userFromIntent = getIntent().getStringExtra("USER_NAME");
+        userFromIntent = getIntent().getStringExtra("USER_NAME");
         textViewUserName.setText(userFromIntent);
         scoreIdsOfUser = ResultRepo.getScoreIdsOfUser(userFromIntent);
+
+        if (!userFromIntent.equals("Admin")) {
+            appCompatButtonUserList.setVisibility(View.INVISIBLE);
+            appCompatButtonAddGame.setVisibility(View.INVISIBLE);
+        }
+
         getDataFromSQLite();
     }
 
-    /**
-     * This implemented method is to listen the click on view
-     *
-     * @param v
-     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -116,8 +111,17 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
                 showUserList();
                 break;
             case R.id.appCompatButtonAddGame:
-                addGame();
+                gameInitMenu();
                 break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!AppHelper.shouldAllowOnBackPressed) {
+            // do nothing
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -133,8 +137,9 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
         startActivity(createScoreIntent);
     }
 
-    private void addGame() {
-        Intent addGameIntent = new Intent(getApplicationContext(), CreateGameActivity.class);
+    private void gameInitMenu() {
+        Intent addGameIntent = new Intent(getApplicationContext(), GameListActivity.class);
+        addGameIntent.putExtra("USER_NAME", textViewUserName.getText().toString().trim());
         startActivity(addGameIntent);
     }
 
@@ -144,9 +149,6 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
         startActivity(showResultIntent);
     }
 
-    /**
-     * This method is to fetch all user records from SQLite
-     */
     private void getDataFromSQLite() {
 
         // AsyncTask is used that SQLite operation not blocks the UI Thread.
@@ -154,9 +156,14 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
             @Override
             protected Void doInBackground(Void... params) {
                 listScores.clear();
-                listScores.addAll(ScoreRepo.getAllScoreOfUser(scoreIdsOfUser));
-                //listScores.addAll(ScoreRepo.getAllScore());
-
+                if (userFromIntent.equals("Admin")) {
+                    listScores.addAll(ScoreRepo.getAllScore());
+                }
+                else {
+                    for (int i = 0; i < scoreIdsOfUser.size(); i++) {
+                        listScores.add(ScoreRepo.getScoreById(scoreIdsOfUser.get(i)));
+                    }
+                }
                 return null;
             }
 

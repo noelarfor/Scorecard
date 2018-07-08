@@ -4,7 +4,7 @@ public class Score {
 
     public static final String TAG = Score.class.getSimpleName();
     public static final String TABLE = "score";
-    // Table Column names
+
     public static final String KEY_SCORE_ID = "score_id";
     public static final String KEY_SCORE_NAME = "score_name";
     public static final String KEY_SCORE_TYPE = "score_type";
