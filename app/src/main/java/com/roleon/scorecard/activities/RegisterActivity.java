@@ -10,12 +10,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.helpers.InputValidation;
+import com.roleon.scorecard.helpers.URLs;
+import com.roleon.scorecard.helpers.VolleySingleton;
 import com.roleon.scorecard.model.User;
 import com.roleon.scorecard.sql.repo.UserRepo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -107,11 +121,46 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (!userRepo.checkUser(textInputEditTextUser.getText().toString().trim())) {
 
             user.setName(textInputEditTextUser.getText().toString().trim());
-            user.setPassword(textInputEditTextPassword.getText().toString().trim());
+            user.setPassword(AppHelper.MD5(textInputEditTextPassword.getText().toString().trim()));
             user.setCreated_at(AppHelper.getDateTime());
 
-            userRepo.addUser(user);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SIGNUP,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject obj = new JSONObject(response);
+                                if (!obj.getBoolean("error")) {
+                                    user.setSyncStatus(AppHelper.SYNCED_WITH_SERVER);
+                                } else {
+                                    user.setSyncStatus(AppHelper.NOT_SYNCED_WITH_SERVER);
+                                }
+                                userRepo.addUser(user);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // on error storing the name to sqlite with status unsynced
+                            user.setSyncStatus(AppHelper.NOT_SYNCED_WITH_SERVER);
+                            userRepo.addUser(user);
+                            Toast.makeText(getApplicationContext(), "RemoteDB: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("username", user.getName());
+                    params.put("password", user.getPassword());
+                    params.put("timestamp", user.getCreated_at());
+                    return params;
+                }
+            };
 
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
             Snackbar.make(nestedScrollView, getString(R.string.success_message), Snackbar.LENGTH_LONG).show();
             emptyInputEditText();
 

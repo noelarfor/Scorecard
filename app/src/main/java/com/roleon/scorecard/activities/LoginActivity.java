@@ -1,5 +1,7 @@
 package com.roleon.scorecard.activities;
 
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -9,12 +11,29 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.helpers.InputValidation;
+import com.roleon.scorecard.helpers.URLs;
+import com.roleon.scorecard.helpers.VolleySingleton;
+import com.roleon.scorecard.model.User;
 import com.roleon.scorecard.sql.repo.UserRepo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,9 +51,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private InputValidation inputValidation;
     private UserRepo userRepo;
+    private User user;
     private boolean isFromIntent = false;
 
     private int numOfLogin = 1;
+    private static final String TAG = "HTTP Response";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         inputValidation = new InputValidation(this);
         userRepo = new UserRepo();
+        user = new User();
 
         Intent intent = getIntent();
         if (intent.hasExtra("NUM_LOGIN")) {
@@ -112,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
         if (userRepo.checkUser(textInputEditTextUser.getText().toString().trim()
-                , textInputEditTextPassword.getText().toString().trim())) {
+                , AppHelper.MD5(textInputEditTextPassword.getText().toString().trim()))) {
 
             if (AppHelper.isInit) {
                 AppHelper.currentUser = userRepo.getUser(textInputEditTextUser.getText().toString().trim());
@@ -148,13 +170,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
         } else {
+            // check if user is stored in remote db
+            getUserFromRemoteDB(textInputEditTextUser.getText().toString().trim()
+                    , AppHelper.MD5(textInputEditTextPassword.getText().toString().trim()));
+
             // Snack Bar to show success message that record is wrong
-            Snackbar.make(nestedScrollView, getString(R.string.error_valid_username_password), Snackbar.LENGTH_LONG).show();
+            //Snackbar.make(nestedScrollView, getString(R.string.error_valid_username_password), Snackbar.LENGTH_LONG).show();
         }
     }
 
     private void emptyInputEditText() {
         textInputEditTextUser.setText(null);
         textInputEditTextPassword.setText(null);
+    }
+
+    private void getUserFromRemoteDB(final String username, final String password){
+        AppHelper.showProgressDialogTimed(this, "SyncDB", "Searching for user...", 2000);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_GETUSER,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            if (!obj.getBoolean("error")) {
+                                Snackbar.make(nestedScrollView, "RemoteDB: " + obj.getString("message"), Snackbar.LENGTH_LONG).show();
+                                user.setName(obj.getString("username"));
+                                user.setPassword(obj.getString("password"));
+                                user.setCreated_at(obj.getString("timestamp"));
+                                user.setSyncStatus(AppHelper.SYNCED_WITH_SERVER);
+                                userRepo.addUser(user);
+                            }
+                            else {
+                                Snackbar.make(nestedScrollView, "RemoteDB: " + obj.getString("message"), Snackbar.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                         Snackbar.make(nestedScrollView, "RemoteDB: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

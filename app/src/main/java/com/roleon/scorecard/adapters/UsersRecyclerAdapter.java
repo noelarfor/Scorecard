@@ -1,5 +1,6 @@
 package com.roleon.scorecard.adapters;
 
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,6 +35,10 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
         holder.textViewName.setText(listUsers.get(position).getName());
         holder.textViewPassword.setText(listUsers.get(position).getPassword());
         holder.textViewDate.setText(listUsers.get(position).getCreated_at());
+        if (listUsers.get(position).getSyncStatus() == 0)
+            holder.imageViewStatus.setImageResource(R.drawable.stopwatch);
+        else
+            holder.imageViewStatus.setImageResource(R.drawable.success);
     }
 
     @Override
@@ -47,12 +52,14 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
         public AppCompatTextView textViewName;
         public AppCompatTextView textViewPassword;
         public AppCompatTextView textViewDate;
+        public AppCompatImageView imageViewStatus;
 
         public UserViewHolder(View view) {
             super(view);
             textViewName = (AppCompatTextView) view.findViewById(R.id.textViewName);
             textViewPassword = (AppCompatTextView) view.findViewById(R.id.textViewPassword);
             textViewDate = (AppCompatTextView) view.findViewById(R.id.textViewDate);
+            imageViewStatus = (AppCompatImageView) view.findViewById(R.id.imageSyncStatus);
         }
     }
 }

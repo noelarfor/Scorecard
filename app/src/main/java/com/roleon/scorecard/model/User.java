@@ -8,11 +8,13 @@ public class User {
     public static final String KEY_USER_NAME = "user_name";
     public static final String KEY_USER_PASSWORD = "user_password";
     public static final String KEY_CREATED_AT = "created_at";
+    public static final String KEY_SYNC_STATUS = "sync_status";
 
     private int user_id;
     private String user_name;
     private String user_password;
     private String created_at;
+    private int sync_status;
 
     public int getId() { return user_id; }
 
@@ -39,4 +41,8 @@ public class User {
     public String getCreated_at() { return created_at; }
 
     public void setCreated_at(String created_at) { this.created_at = created_at; }
+
+    public int getSyncStatus() { return sync_status; };
+
+    public void setSyncStatus(int sync_status) { this.sync_status = sync_status; }
 }

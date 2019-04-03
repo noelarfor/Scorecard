@@ -50,6 +50,7 @@
     <string name="text_hello">Welcome,</string>
     <string name="text_remaining_login">User(s) Still Have To Be Logged In</string>
     <string name="text_user_already_logged_in">User Is Already Logged In</string>
+    <string name="error_server_response">Server communication error</string>
 
     <!-- ScoreList Activity -->
     <string name="text_scores">List Of Your Scores:</string>
@@ -77,5 +78,6 @@
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="hint_date">Created At</string>
+    <string name="hint_syncStatus">Sync Status</string>
 
 </resources>

@@ -172,7 +172,7 @@ public class ScoreRepo {
     public static Score getScoreById(String score_id) {
         // array of columns to fetch
         String[] columns = {
-                KEY_SCORE_ID,
+                Score.KEY_SCORE_ID,
                 Score.KEY_SCORE_NAME,
                 Score.KEY_SCORE_TYPE,
                 Score.KEY_SCORE_MODE,
