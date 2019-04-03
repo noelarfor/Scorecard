@@ -18,35 +18,45 @@
             android:padding="5dp">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewName"
+                android:id="@+id/textViewScoreName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/hint_username"
+                android:text="@string/hint_scorename"
                 android:layout_weight="1"
                 android:textColor="@android:color/darker_gray" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewPassword"
+                android:id="@+id/textViewScoreTyp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/hint_password"
+                android:text="@string/hint_typ"
                 android:layout_weight="1"
                 android:textColor="@android:color/darker_gray" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewDate"
+                android:id="@+id/textViewScoreMode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_mode"
+                android:layout_weight="1"
+                android:textColor="@android:color/darker_gray" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewNumUsers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_mode"
+                android:layout_weight="1"
+                android:textColor="@android:color/darker_gray" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewLastUpdate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/hint_date"
+                android:text="@string/hint_last_update"
                 android:textColor="@android:color/darker_gray" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/imageSyncStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@android:color/darker_gray" />
         </LinearLayout>
 
     </LinearLayout>

@@ -17,33 +17,13 @@
             android:layout_marginTop="40dp"
             android:src="@drawable/scorecard_logo" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/text_hello" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewName"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
     </android.support.v7.widget.LinearLayoutCompat>
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:text="@string/text_accounts" />
+        android:text="@string/text_games" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,35 +42,44 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_username" />
+                android:text="@string/hint_gamename" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_password" />
-
-            <android.support.v7.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:layout_weight="1"
-            android:text="@string/hint_date" />
+                android:text="@string/hint_win_points" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
-                android:text="@string/hint_syncStatus" />
+                android:text="@string/hint_loss_points" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:layout_weight="1"
+                android:text="@string/hint_drawn_points" />
+
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewUsers"
+            android:id="@+id/recyclerViewGames"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="1dp" />
+
+        <android.support.v7.widget.AppCompatButton
+            style="@style/buttonStyle"
+            android:id="@+id/appCompatButtonCreateGame"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/text_create_game_short" />
 
     </LinearLayout>
 </android.support.v7.widget.LinearLayoutCompat>

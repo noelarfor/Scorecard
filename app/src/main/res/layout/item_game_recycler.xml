@@ -18,34 +18,35 @@
             android:padding="5dp">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewName"
+                android:id="@+id/textViewGameName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/hint_username"
+                android:text="@string/hint_gamename"
                 android:layout_weight="1"
                 android:textColor="@android:color/darker_gray" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewPassword"
+                android:id="@+id/textViewWinPoints"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/hint_password"
+                android:text="@string/hint_win_points"
                 android:layout_weight="1"
                 android:textColor="@android:color/darker_gray" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/textViewDate"
+                android:id="@+id/textViewLossPoints"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/hint_date"
+                android:text="@string/hint_loss_points"
                 android:textColor="@android:color/darker_gray" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/imageSyncStatus"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewDrawnPoints"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="@string/hint_drawn_points"
                 android:textColor="@android:color/darker_gray" />
         </LinearLayout>
 

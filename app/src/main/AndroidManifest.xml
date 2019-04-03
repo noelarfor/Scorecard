@@ -2,12 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.roleon.scorecard">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
+        android:name=".helpers.AppHelper"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/ScorecardTheme">
+
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait">
@@ -17,12 +22,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UsersListActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ScoreListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CreateGameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CreateScoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.GameListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CreateResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ResultListActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name=".helpers.NetworkStateChecker">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

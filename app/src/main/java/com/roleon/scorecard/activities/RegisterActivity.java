@@ -10,11 +10,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.roleon.scorecard.R;
+import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.helpers.InputValidation;
+import com.roleon.scorecard.helpers.URLs;
+import com.roleon.scorecard.helpers.VolleySingleton;
 import com.roleon.scorecard.model.User;
-import com.roleon.scorecard.sql.DatabaseHelper;
+import com.roleon.scorecard.sql.repo.UserRepo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,8 +49,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private AppCompatTextView appCompatTextViewLoginLink;
 
     private InputValidation inputValidation;
-    private DatabaseHelper databaseHelper;
     private User user;
+    private UserRepo userRepo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,9 +63,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         initObjects();
     }
 
-    /**
-     * This method is to initialize views
-     */
     private void initViews() {
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
 
@@ -68,31 +80,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    /**
-     * This method is to initialize listeners
-     */
     private void initListeners() {
         appCompatButtonRegister.setOnClickListener(this);
         appCompatTextViewLoginLink.setOnClickListener(this);
 
     }
 
-    /**
-     * This method is to initialize objects to be used
-     */
     private void initObjects() {
         inputValidation = new InputValidation(activity);
-        databaseHelper = new DatabaseHelper(activity);
         user = new User();
-
+        userRepo = new UserRepo();
     }
 
-
-    /**
-     * This implemented method is to listen the click on view
-     *
-     * @param v
-     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -107,9 +106,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    /**
-     * This method is to validate the input text fields and post data to SQLite
-     */
     private void postDataToSQLite() {
         if (!inputValidation.isInputEditTextFilled(textInputEditTextUser, textInputLayoutUser, getString(R.string.error_message_username))) {
             return;
@@ -122,28 +118,59 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        if (!databaseHelper.checkUser(textInputEditTextUser.getText().toString().trim())) {
+        if (!userRepo.checkUser(textInputEditTextUser.getText().toString().trim())) {
 
             user.setName(textInputEditTextUser.getText().toString().trim());
-            user.setPassword(textInputEditTextPassword.getText().toString().trim());
+            user.setPassword(AppHelper.MD5(textInputEditTextPassword.getText().toString().trim()));
+            user.setCreated_at(AppHelper.getDateTime());
 
-            databaseHelper.addUser(user);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SIGNUP,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject obj = new JSONObject(response);
+                                if (!obj.getBoolean("error")) {
+                                    user.setSyncStatus(AppHelper.SYNCED_WITH_SERVER);
+                                } else {
+                                    user.setSyncStatus(AppHelper.NOT_SYNCED_WITH_SERVER);
+                                }
+                                userRepo.addUser(user);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // on error storing the name to sqlite with status unsynced
+                            user.setSyncStatus(AppHelper.NOT_SYNCED_WITH_SERVER);
+                            userRepo.addUser(user);
+                            Toast.makeText(getApplicationContext(), "RemoteDB: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("username", user.getName());
+                    params.put("password", user.getPassword());
+                    params.put("timestamp", user.getCreated_at());
+                    return params;
+                }
+            };
 
-            // Snack Bar to show success message that record saved successfully
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
             Snackbar.make(nestedScrollView, getString(R.string.success_message), Snackbar.LENGTH_LONG).show();
             emptyInputEditText();
 
         } else {
-            // Snack Bar to show error message that record already exists
             Snackbar.make(nestedScrollView, getString(R.string.error_email_exists), Snackbar.LENGTH_LONG).show();
         }
 
 
     }
 
-    /**
-     * This method is to empty all input edit text
-     */
     private void emptyInputEditText() {
         textInputEditTextUser.setText(null);
         textInputEditTextPassword.setText(null);

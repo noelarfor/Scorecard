@@ -12,9 +12,10 @@
 
     <color name="colorGreen">#1EB980</color>
     <color name="colorDarkGreen">#045D56</color>
-    <color name="colorOrange">#1FF6859</color>
-    <color name="colorYellow">#1FFCF44</color>
-    <color name="colorPurple">#1B15Dff</color>
-    <color name="colorBlue">#172DEFF</color>
+    <color name="colorOrange">#FF6859</color>
+    <color name="colorYellow">#FFCF44</color>
+    <color name="colorPurple">#B15Dff</color>
+    <color name="colorBlue">#72DEFF</color>
+    <color name="colorWhite">#FFFFFF</color>
 
 </resources>

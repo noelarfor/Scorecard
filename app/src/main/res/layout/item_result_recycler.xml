@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="4dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewUserNameResultList"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_username"
+                android:textColor="@android:color/darker_gray" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewResultWin"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_win_points_short"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewResultDrawn"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_drawn_points_short"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewResultLoss"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_loss_points_short"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewResultDiff"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_diff"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewResultPoints"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_points"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

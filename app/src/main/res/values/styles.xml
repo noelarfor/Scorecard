@@ -16,13 +16,22 @@
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:buttonStyle">@style/buttonStyle</item>
 
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+        <!--item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item-->
 
     </style>
 
     <style name="buttonStyle" parent="android:Widget.Button">
         <item name="android:background">@color/colorBackgroundButton</item>
+        <item name="android:textColor">@color/colorText</item>
+
+    </style>
+
+    <!--style name="ProgressDialog" parent="@android:style/Theme.Dialog"-->
+    <style name="ProgressDialog" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@color/colorBackgroundButton</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:textColor">@color/colorText</item>
     </style>
 

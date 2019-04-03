@@ -1,293 +1,52 @@
 package com.roleon.scorecard.sql;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.roleon.scorecard.helpers.AppHelper;
+import com.roleon.scorecard.model.Game;
+import com.roleon.scorecard.model.Score;
+import com.roleon.scorecard.model.Result;
 import com.roleon.scorecard.model.User;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.roleon.scorecard.sql.repo.ScoreRepo;
+import com.roleon.scorecard.sql.repo.GameRepo;
+import com.roleon.scorecard.sql.repo.ResultRepo;
+import com.roleon.scorecard.sql.repo.UserRepo;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    // Database Version
-    private static final int DATABASE_VERSION = 1;
+    // Database Version - increase version each time after modified db
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = "scorecardManager.db";
+    private static final String TAG = DatabaseHelper.class.getSimpleName().toString();
 
-    // User table name
-    private static final String TABLE_USER = "user";
-    private static final String TABLE_SCORE = "score";
-    private static final String TABLE_RESULT = "result";
-
-    // Common column names
-    private static final String COLUMN_ID = "id";
-
-    // User Table Columns names
-    private static final String COLUMN_USER_NAME = "user_name";
-    private static final String COLUMN_USER_PASSWORD = "user_password";
-
-    // Score Table Column names
-    private static final String COLUMN_SCORE_NAME = "score_name";
-    private static final String COLUMN_SCORE_TYPE = "score_type";
-    private static final String COLUMN_SCORE_MODE = "score_mode";
-    private static final String COLUMN_NUM_USERS = "num_users";
-    private static final String COLUMN_SCORE_TIMESTAMP = "score_timestamp";
-
-    // Result Table Column names
-    private static final String COLUMN_RESULT = "result";
-    private static final String COLUmN_WIN_LOSE = "win_lose";
-
-    // create table sql query
-    // User table create statement
-    private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COLUMN_USER_NAME + " TEXT,"
-            + COLUMN_USER_PASSWORD + " TEXT"
-            + ")";
-
-    // Score table create statement
-    private String CREATE_SCORE_TABLE = "CREATE TABLE " + TABLE_SCORE + "("
-            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COLUMN_SCORE_NAME + " TEXT,"
-            + COLUMN_SCORE_TYPE + " INTEGER,"
-            + COLUMN_SCORE_MODE + " INTEGER,"
-            + COLUMN_NUM_USERS + " INTEGER,"
-            + COLUMN_SCORE_TIMESTAMP + " DATETIME"
-            + ")";
-
-    // Result table create statement
-    private String CREATE_RESULT_TABLE = "CREATE TABLE " + TABLE_RESULT + "("
-            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COLUMN_RESULT + " INTEGER,"
-            + COLUmN_WIN_LOSE + " TEXT"
-            + ")";
-
-    /**
-     * Constructor
-     *
-     * @param context
-     */
-    public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    public DatabaseHelper() {
+        super(AppHelper.getContext(), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(CREATE_USER_TABLE);
-        db.execSQL(CREATE_SCORE_TABLE);
-        db.execSQL(CREATE_RESULT_TABLE);
+        db.execSQL(UserRepo.createTable());
+        db.execSQL(ScoreRepo.createTable());
+        db.execSQL(GameRepo.createTable());
+        db.execSQL(ResultRepo.createTable());
     }
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d(TAG, String.format("SQLiteDatabase.onUpgrade(%d -> %d)", oldVersion, newVersion));
 
-        //Drop User Table if exist
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCORE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULT);
+        //Drop table if existed, all data will be gone!!!
+        db.execSQL("DROP TABLE IF EXISTS " + User.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + Score.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + Game.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + Result.TABLE);
 
         // Create tables again
         onCreate(db);
     }
-
-    /* ======================= "user" table methods ==========================" */
-
-    /**
-     * This method is to create user record
-     *
-     * @param user
-     */
-    public void addUser(User user) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_USER_NAME, user.getName());
-        values.put(COLUMN_USER_PASSWORD, user.getPassword());
-
-        // Inserting Row
-        db.insert(TABLE_USER, null, values);
-        db.close();
-    }
-
-    /**
-     * This method is to fetch all user and return the list of user records
-     *
-     * @return list
-     */
-    public List<User> getAllUser() {
-        // array of columns to fetch
-        String[] columns = {
-                COLUMN_ID,
-                //COLUMN_USER_EMAIL,
-                COLUMN_USER_NAME,
-                COLUMN_USER_PASSWORD
-        };
-        // sorting orders
-        String sortOrder =
-                COLUMN_USER_NAME + " ASC";
-        List<User> userList = new ArrayList<User>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // query the user table
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
-         */
-        Cursor cursor = db.query(TABLE_USER, //Table to query
-                columns,    //columns to return
-                null,        //columns for the WHERE clause
-                null,        //The values for the WHERE clause
-                null,       //group the rows
-                null,       //filter by row groups
-                sortOrder); //The sort order
-
-
-        // Traversing through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                User user = new User();
-                user.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_ID))));
-                user.setName(cursor.getString(cursor.getColumnIndex(COLUMN_USER_NAME)));
-                //user.setEmail(cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL)));
-                user.setPassword(cursor.getString(cursor.getColumnIndex(COLUMN_USER_PASSWORD)));
-                // Adding user record to list
-                userList.add(user);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-
-        // return user list
-        return userList;
-    }
-
-    /**
-     * This method to update user record
-     *
-     * @param user
-     */
-    public void updateUser(User user) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_USER_NAME, user.getName());
-        //values.put(COLUMN_USER_EMAIL, user.getEmail());
-        values.put(COLUMN_USER_PASSWORD, user.getPassword());
-
-        // updating row
-        db.update(TABLE_USER, values, COLUMN_ID + " = ?",
-                new String[]{String.valueOf(user.getId())});
-        db.close();
-    }
-
-    /**
-     * This method is to delete user record
-     *
-     * @param user
-     */
-    public void deleteUser(User user) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        // delete user record by id
-        db.delete(TABLE_USER, COLUMN_ID + " = ?",
-                new String[]{String.valueOf(user.getId())});
-        db.close();
-    }
-
-    /**
-     * This method to check user exist or not
-     *
-     * @param user
-     * @return true/false
-     */
-    public boolean checkUser(String user) {
-
-        // array of columns to fetch
-        String[] columns = { COLUMN_ID };
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // selection criteria
-        String selection = COLUMN_USER_NAME + " = ?";
-
-        // selection argument
-        String[] selectionArgs = {user};
-
-        // query user table with condition
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id FROM user WHERE user_email = 'name@domain.com';
-         */
-        Cursor cursor = db.query(TABLE_USER, //Table to query
-                columns,                    //columns to return
-                selection,                  //columns for the WHERE clause
-                selectionArgs,              //The values for the WHERE clause
-                null,                       //group the rows
-                null,                      //filter by row groups
-                null);                      //The sort order
-        int cursorCount = cursor.getCount();
-        cursor.close();
-        db.close();
-
-        if (cursorCount > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * This method to check user exist or not
-     *
-     * @param user
-     * @param password
-     * @return true/false
-     */
-    public boolean checkUser(String user, String password) {
-
-        // array of columns to fetch
-        String[] columns = { COLUMN_ID };
-        SQLiteDatabase db = this.getReadableDatabase();
-        // selection criteria
-        String selection = COLUMN_USER_NAME + " = ?" + " AND " + COLUMN_USER_PASSWORD + " = ?";
-
-        // selection arguments
-        String[] selectionArgs = {user, password};
-
-        // query user table with conditions
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id FROM user WHERE user_email = 'name@domain.com' AND user_password = 'qwerty';
-         */
-        Cursor cursor = db.query(TABLE_USER, //Table to query
-                columns,                    //columns to return
-                selection,                  //columns for the WHERE clause
-                selectionArgs,              //The values for the WHERE clause
-                null,                       //group the rows
-                null,                       //filter by row groups
-                null);                      //The sort order
-
-        int cursorCount = cursor.getCount();
-
-        cursor.close();
-        db.close();
-        if (cursorCount > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /* ======================= "score" table methods ==========================" */
-
-    /* ======================= "result" table methods =========================" */
 }
