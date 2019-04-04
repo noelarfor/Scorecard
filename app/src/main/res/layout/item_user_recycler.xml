@@ -42,7 +42,7 @@
                 android:textColor="@android:color/darker_gray" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/imageSyncStatus"
+                android:id="@+id/imageSyncStatusUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

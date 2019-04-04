@@ -8,4 +8,7 @@ public class URLs {
     public static final String URL_LOGIN = ROOT_URL + "login";
     public static final String URL_SIGNUP = ROOT_URL + "signup";
     public static final String URL_GETUSER = ROOT_URL + "getuser";
+
+    public static final String URL_ADD_SCORE = ROOT_URL + "addscore";
+    public static final String URL_CHECK_SCORE = ROOT_URL + "checkscore";
 }

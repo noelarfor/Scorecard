@@ -22,7 +22,8 @@ public class ScoreRepo {
                 + Score.KEY_SCORE_MODE + " INTEGER,"
                 + Score.KEY_NUM_USERS + " INTEGER,"
                 + Score.KEY_LAST_UPDDATE + " TEXT,"
-                + Score.KEY_GAME_ID + " INTEGER"
+                + Score.KEY_GAME_ID + " INTEGER,"
+                + Score.KEY_SYNC_STATUS + " INTEGER"
                 + ")";
     }
 
@@ -36,6 +37,8 @@ public class ScoreRepo {
         values.put(Score.KEY_NUM_USERS, score.getNum_users());
         values.put(Score.KEY_GAME_ID, score.getGame_id());
         values.put(Score.KEY_LAST_UPDDATE, score.getLast_update());
+        values.put(Score.KEY_SYNC_STATUS, score.getSyncStatus());
+
         // Inserting Row
         db.insert(Score.TABLE, null, values);
         DatabaseManager.getInstance().closeDatabase();
@@ -80,7 +83,8 @@ public class ScoreRepo {
                 Score.KEY_SCORE_MODE,
                 Score.KEY_NUM_USERS,
                 Score.KEY_GAME_ID,
-                Score.KEY_LAST_UPDDATE
+                Score.KEY_LAST_UPDDATE,
+                Score.KEY_SYNC_STATUS
         };
         // sorting orders
         String sortOrder =
@@ -110,6 +114,7 @@ public class ScoreRepo {
                 score.setNum_users(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_NUM_USERS))));
                 score.setGame_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_GAME_ID))));
                 score.setLast_update(cursor.getString(cursor.getColumnIndex(Score.KEY_LAST_UPDDATE)));
+                score.setSyncStatus(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SYNC_STATUS))));
                 // Adding user record to list
                 scoreList.add(score);
             } while (cursor.moveToNext());
@@ -131,6 +136,7 @@ public class ScoreRepo {
                 Score.KEY_NUM_USERS,
                 Score.KEY_LAST_UPDDATE,
                 Score.KEY_GAME_ID,
+                Score.KEY_SYNC_STATUS
         };
 
         // selection criteria
@@ -152,17 +158,18 @@ public class ScoreRepo {
                 null,       //filter by row groups
                 null); //The sort order
 
-        if (cursor != null)
-            cursor.moveToFirst();
+        if ((cursor != null) && cursor.moveToFirst()) {
+            score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_SCORE_ID))));
+            score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
+            score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
+            score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
+            score.setNum_users(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_NUM_USERS))));
+            score.setLast_update(cursor.getString(cursor.getColumnIndex(Score.KEY_LAST_UPDDATE)));
+            score.setGame_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_GAME_ID))));
+            score.setSyncStatus(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SYNC_STATUS))));
 
-        score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_SCORE_ID))));
-        score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
-        score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
-        score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
-        score.setNum_users(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_NUM_USERS))));
-        score.setLast_update(cursor.getString(cursor.getColumnIndex(Score.KEY_LAST_UPDDATE)));
-        score.setGame_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_GAME_ID))));
-        cursor.close();
+            cursor.close();
+        }
         DatabaseManager.getInstance().closeDatabase();
 
         // return score list
@@ -179,6 +186,7 @@ public class ScoreRepo {
                 Score.KEY_NUM_USERS,
                 Score.KEY_LAST_UPDDATE,
                 Score.KEY_GAME_ID,
+                Score.KEY_SYNC_STATUS
         };
 
         // selection criteria
@@ -200,20 +208,20 @@ public class ScoreRepo {
                 null,       //filter by row groups
                 null); //The sort order
 
-        if (cursor != null)
-            cursor.moveToFirst();
+        if (cursor != null && cursor.moveToFirst()) {
+            score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_SCORE_ID))));
+            score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
+            score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
+            score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
+            score.setNum_users(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_NUM_USERS))));
+            score.setLast_update(cursor.getString(cursor.getColumnIndex(Score.KEY_LAST_UPDDATE)));
+            score.setGame_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_GAME_ID))));
+            score.setSyncStatus(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SYNC_STATUS))));
 
-        score.setScore_Id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_SCORE_ID))));
-        score.setScore_name(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_NAME)));
-        score.setScore_typ(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_TYPE))));
-        score.setScore_mode(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_SCORE_MODE))));
-        score.setNum_users(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_NUM_USERS))));
-        score.setLast_update(cursor.getString(cursor.getColumnIndex(Score.KEY_LAST_UPDDATE)));
-        score.setGame_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Score.KEY_GAME_ID))));
-        cursor.close();
+            cursor.close();
+        }
         DatabaseManager.getInstance().closeDatabase();
 
-        // return score list
         return score;
     }
 
@@ -221,6 +229,7 @@ public class ScoreRepo {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(Score.KEY_SYNC_STATUS, score.getSyncStatus());
         values.put(Score.KEY_LAST_UPDDATE, score.getLast_update());
 
         // updating row

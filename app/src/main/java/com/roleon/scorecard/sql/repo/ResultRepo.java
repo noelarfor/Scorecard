@@ -3,7 +3,9 @@ package com.roleon.scorecard.sql.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import com.roleon.scorecard.helpers.AppHelper;
 import com.roleon.scorecard.model.Result;
 import com.roleon.scorecard.sql.DatabaseManager;
 
@@ -192,6 +194,7 @@ public class ResultRepo {
                 null,       //filter by row groups
                 null); //The sort order
 
+        Log.d("SCORECARD: ", "Result ScoreID " + score_id);
         // Traversing through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
@@ -205,6 +208,7 @@ public class ResultRepo {
                 result.setResult_diff(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_DIFF))));
                 result.setResult_points(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Result.KEY_RESULT_POINTS))));
                 result.setCreated_at(cursor.getString(cursor.getColumnIndex(Result.KEY_CREATED_AT)));
+                Log.d("SCORECARD: ", "Result User " + cursor.getString(cursor.getColumnIndex(Result.KEY_USER_NAME)));
                 // Adding user record to list
                 resultList.add(result);
             } while (cursor.moveToNext());

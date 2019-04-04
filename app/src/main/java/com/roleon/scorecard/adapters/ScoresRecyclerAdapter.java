@@ -1,5 +1,6 @@
 package com.roleon.scorecard.adapters;
 
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,6 +47,10 @@ public class ScoresRecyclerAdapter extends RecyclerView.Adapter<ScoresRecyclerAd
         holder.textViewScoreMode.setText(Integer.toString(listScores.get(position).getScore_mode()));
         holder.textViewNumUsers.setText(Integer.toString(listScores.get(position).getNum_users()));
         holder.textViewLastUpdate.setText(listScores.get(position).getLast_update());
+        if (listScores.get(position).getSyncStatus() == 0)
+            holder.imageViewStatus.setImageResource(R.drawable.stopwatch);
+        else
+            holder.imageViewStatus.setImageResource(R.drawable.success);
     }
 
     @Override
@@ -61,6 +66,7 @@ public class ScoresRecyclerAdapter extends RecyclerView.Adapter<ScoresRecyclerAd
         public AppCompatTextView textViewScoreMode;
         public AppCompatTextView textViewLastUpdate;
         public AppCompatTextView textViewNumUsers;
+        public AppCompatImageView imageViewStatus;
 
         public ScoreViewHolder(View view) {
             super(view);
@@ -69,6 +75,7 @@ public class ScoresRecyclerAdapter extends RecyclerView.Adapter<ScoresRecyclerAd
             textViewScoreMode = (AppCompatTextView) view.findViewById(R.id.textViewScoreMode);
             textViewNumUsers = (AppCompatTextView) view.findViewById(R.id.textViewNumUsers);
             textViewLastUpdate = (AppCompatTextView) view.findViewById(R.id.textViewLastUpdate);
+            imageViewStatus = (AppCompatImageView) view.findViewById(R.id.imageSyncStatusScore);
         }
     }
 

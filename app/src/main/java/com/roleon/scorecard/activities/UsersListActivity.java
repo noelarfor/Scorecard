@@ -32,6 +32,7 @@ public class UsersListActivity extends AppCompatActivity {
     private List<User> listUsers;
     private UsersRecyclerAdapter usersRecyclerAdapter;
     private BroadcastReceiver broadcastReceiver;
+    private BroadcastReceiver networkCheckerReceiver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +45,23 @@ public class UsersListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //registering the broadcast receiver to update sync status
+        registerReceiver(broadcastReceiver, new IntentFilter(AppHelper.DATA_SAVED_BROADCAST));
+        registerReceiver(networkCheckerReceiver, new IntentFilter((ConnectivityManager.CONNECTIVITY_ACTION)));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(networkCheckerReceiver);
+    }
+
     private void initViews() {
         textViewName = (AppCompatTextView) findViewById(R.id.textViewName);
         recyclerViewUsers = (RecyclerView) findViewById(R.id.recyclerViewUsers);
@@ -52,7 +70,6 @@ public class UsersListActivity extends AppCompatActivity {
     private void initObjects() {
         listUsers = new ArrayList<>();
         usersRecyclerAdapter = new UsersRecyclerAdapter(listUsers);
-        registerReceiver(new NetworkStateChecker(), new IntentFilter((ConnectivityManager.CONNECTIVITY_ACTION)));
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewUsers.setLayoutManager(mLayoutManager);
@@ -77,8 +94,11 @@ public class UsersListActivity extends AppCompatActivity {
             }
         };
 
+        networkCheckerReceiver =  new NetworkStateChecker();
+
         //registering the broadcast receiver to update sync status
         registerReceiver(broadcastReceiver, new IntentFilter(AppHelper.DATA_SAVED_BROADCAST));
+        registerReceiver(networkCheckerReceiver, new IntentFilter((ConnectivityManager.CONNECTIVITY_ACTION)));
     }
 
     private void getDataFromSQLite() {
