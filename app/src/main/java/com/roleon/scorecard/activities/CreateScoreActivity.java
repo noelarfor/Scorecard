@@ -1,6 +1,5 @@
 package com.roleon.scorecard.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +9,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -41,7 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class CreateScoreActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -201,7 +199,7 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
 
                     score_id = scoreRepo.getScoreByName(textInputEditTextScore.getText().toString().trim()).getScore_Id();
                     created_at = AppHelper.getDateTime();
-                    Log.d("SCORECARD_CREATE: ", "size of listusers " + AppHelper.listUsers.size() + " scoreid " + score_id);
+
                     for (int i = 0; i < AppHelper.listUsers.size(); i++) {
                         result.setUser_name(AppHelper.listUsers.get(i).getName());
                         result.setScore_id(score_id);
@@ -221,10 +219,8 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
                                     try {
                                         JSONObject obj = new JSONObject(response);
                                         if (!obj.getBoolean("error")) {
-                                            score.setSyncStatus(AppHelper.SYNCED_WITH_SERVER);
-                                            score.setLast_update(AppHelper.getDateTime());
-                                            scoreRepo.updateScore(score);
-                                            Log.d("SCORECARD_CREATE: ", "repo update");
+                                            score = scoreRepo.getScoreByName(textInputEditTextScore.getText().toString().trim());
+                                            scoreRepo.updateScore(score, AppHelper.SYNCED_WITH_SERVER);
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
