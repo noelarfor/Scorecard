@@ -13,6 +13,7 @@ public class Result {
     public static final String KEY_RESULT_DIFF = "result_add_diff";
     public static final String KEY_RESULT_POINTS = "result_points";
     public static final String KEY_CREATED_AT = "created_at";
+    public static final String KEY_SYNC_STATUS = "sync_status";
 
     private int result_id;
     private String user_name;
@@ -23,6 +24,7 @@ public class Result {
     private int result_add_diff;
     private int result_points;
     private String created_at;
+    private int sync_status;
 
     public int getResult_id() { return result_id; }
 
@@ -59,4 +61,8 @@ public class Result {
     public int getResult_points() { return result_points; }
 
     public void setResult_points(int result_points) { this.result_points = result_points; }
+
+    public int getSyncStatus() { return sync_status; }
+
+    public void setSyncStatus(int sync_status) { this.sync_status = sync_status; }
 }

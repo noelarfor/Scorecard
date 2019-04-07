@@ -12,6 +12,7 @@ public class Score {
     public static final String KEY_NUM_USERS = "num_users";
     public static final String KEY_LAST_UPDDATE = "last_update";
     public static final String KEY_GAME_ID = "game_id";
+    public static final String KEY_SYNC_STATUS = "sync_status";
 
     private int score_id;
     private String score_name;
@@ -20,6 +21,7 @@ public class Score {
     private int num_users;
     private String last_update;
     private int game_id;
+    private int sync_status;
 
     public int getScore_Id() {
         return score_id;
@@ -72,4 +74,8 @@ public class Score {
     public int getGame_id() { return game_id; }
 
     public void setGame_id(int game_id) { this.game_id = game_id; }
+
+    public int getSyncStatus() { return sync_status; };
+
+    public void setSyncStatus(int sync_status) { this.sync_status = sync_status; }
 }

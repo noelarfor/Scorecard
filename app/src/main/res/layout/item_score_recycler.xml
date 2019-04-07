@@ -57,6 +57,12 @@
                 android:text="@string/hint_last_update"
                 android:textColor="@android:color/darker_gray" />
 
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/imageSyncStatusScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@android:color/darker_gray" />
         </LinearLayout>
 
     </LinearLayout>

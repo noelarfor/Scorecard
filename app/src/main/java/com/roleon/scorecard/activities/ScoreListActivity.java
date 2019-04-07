@@ -1,6 +1,10 @@
 package com.roleon.scorecard.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,11 +14,13 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.adapters.ScoresRecyclerAdapter;
 import com.roleon.scorecard.helpers.AppHelper;
+import com.roleon.scorecard.helpers.NetworkStateChecker;
 import com.roleon.scorecard.helpers.SimpleDividerItemDecoration;
 import com.roleon.scorecard.model.Score;
 import com.roleon.scorecard.sql.repo.ResultRepo;
@@ -29,6 +35,8 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
     private RecyclerView recyclerViewScores;
     private List<Score> listScores;
     private ScoresRecyclerAdapter scoresRecyclerAdapter;
+    private BroadcastReceiver broadcastReceiver;
+    private BroadcastReceiver networkCheckerReceiver;
 
     private AppCompatButton appCompatButtonCreateScoreList;
     private AppCompatButton appCompatButtonUserList;
@@ -47,6 +55,23 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
         initViews();
         initObjects();
         initListeners();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //registering the broadcast receiver to update sync status
+        registerReceiver(broadcastReceiver, new IntentFilter(AppHelper.DATA_SAVED_BROADCAST));
+        registerReceiver(networkCheckerReceiver, new IntentFilter((ConnectivityManager.CONNECTIVITY_ACTION)));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(networkCheckerReceiver);
     }
 
     private void initViews() {
@@ -99,6 +124,19 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
         }
 
         getDataFromSQLite();
+
+        //the broadcast receiver to update sync status
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                getDataFromSQLite();
+            }
+        };
+
+        networkCheckerReceiver =  new NetworkStateChecker();
+
+        registerReceiver(broadcastReceiver, new IntentFilter(AppHelper.DATA_SAVED_BROADCAST));
+        registerReceiver(networkCheckerReceiver, new IntentFilter((ConnectivityManager.CONNECTIVITY_ACTION)));
     }
 
     @Override
@@ -144,6 +182,7 @@ public class ScoreListActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void showResultList(Score score) {
+        Log.d("SCORECARD_LIST: ", " scoreid " + Integer.toString(score.getScore_Id()));
         Intent showResultIntent = new Intent(getApplicationContext(), ResultListActivity.class);
         showResultIntent.putExtra("SCORE_ID", Integer.toString(score.getScore_Id()));
         startActivity(showResultIntent);

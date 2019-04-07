@@ -3,6 +3,7 @@ package com.roleon.scorecard.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
@@ -10,7 +11,15 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.roleon.scorecard.R;
+import com.roleon.scorecard.helpers.AppHelper;
+import com.roleon.scorecard.helpers.URLs;
+import com.roleon.scorecard.helpers.VolleySingleton;
 import com.roleon.scorecard.model.Score;
 import com.roleon.scorecard.sql.repo.ScoreRepo;
 import com.roleon.scorecard.model.Result;
@@ -18,8 +27,13 @@ import com.roleon.scorecard.sql.repo.ResultRepo;
 import com.roleon.scorecard.model.Game;
 import com.roleon.scorecard.sql.repo.GameRepo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CreateResultActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,6 +56,7 @@ public class CreateResultActivity extends AppCompatActivity implements View.OnCl
     private int resultUser1;
     private int resultUser2;
     private int numUsers;
+    private int resultIndex;
 
     private int[] numberOfWin;
     private int[] numberOfDrawn;
@@ -173,19 +188,59 @@ public class CreateResultActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
-        for (int i = 0; i < numUsers; i++) {
-            userResultList.get(i).setResult_win(numberOfWin[i]);
-            userResultList.get(i).setResult_drawn(numberOfDrawn[i]);
-            userResultList.get(i).setResult_loss(numberOfLoss[i]);
-            userResultList.get(i).setResult_diff(diffPoints[i]);
-            userResultList.get(i).setResult_points(resultPoints[i]);
+        for (resultIndex = 0; resultIndex < numUsers; resultIndex++) {
+            userResultList.get(resultIndex).setResult_win(numberOfWin[resultIndex]);
+            userResultList.get(resultIndex).setResult_drawn(numberOfDrawn[resultIndex]);
+            userResultList.get(resultIndex).setResult_loss(numberOfLoss[resultIndex]);
+            userResultList.get(resultIndex).setResult_diff(diffPoints[resultIndex]);
+            userResultList.get(resultIndex).setResult_points(resultPoints[resultIndex]);
 
-           resultRepo.updateResult(userResultList.get(i));
+            updateResult(userResultList.get(resultIndex));
         }
 
         Intent showResultListIntent = new Intent(activity, ResultListActivity.class);
         showResultListIntent.putExtra("SCORE_ID", scoreIdFromIntend);
         startActivity(showResultListIntent);
         finish();
+    }
+
+    private void updateResult(final Result result) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_ADD_RESULT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            if (!obj.getBoolean("error")) {
+                                resultRepo.updateResult(result, AppHelper.SYNCED_WITH_SERVER);
+                            } else {
+                                resultRepo.updateResult(result, AppHelper.NOT_SYNCED_WITH_SERVER);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // on error storing the name to sqlite with status unsynced
+                        resultRepo.updateResult(result, AppHelper.NOT_SYNCED_WITH_SERVER);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("win", Integer.toString(userResultList.get(resultIndex).getResult_win()));
+                params.put("drawn", Integer.toString(userResultList.get(resultIndex).getResult_drawn()));
+                params.put("loss", Integer.toString(userResultList.get(resultIndex).getResult_loss()));
+                params.put("diff", Integer.toString(userResultList.get(resultIndex).getResult_diff()));
+                params.put("points", Integer.toString(userResultList.get(resultIndex).getResult_points()));
+                params.put("timestamp", userResultList.get(resultIndex).getCreated_at());
+                params.put("localresultid", Integer.toString(userResultList.get(resultIndex).getResult_id()));
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

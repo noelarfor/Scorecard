@@ -42,7 +42,7 @@ public class User {
 
     public void setCreated_at(String created_at) { this.created_at = created_at; }
 
-    public int getSyncStatus() { return sync_status; };
+    public int getSyncStatus() { return sync_status; }
 
     public void setSyncStatus(int sync_status) { this.sync_status = sync_status; }
 }

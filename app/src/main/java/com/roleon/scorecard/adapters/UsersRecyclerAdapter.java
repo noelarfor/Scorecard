@@ -59,7 +59,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
             textViewName = (AppCompatTextView) view.findViewById(R.id.textViewName);
             textViewPassword = (AppCompatTextView) view.findViewById(R.id.textViewPassword);
             textViewDate = (AppCompatTextView) view.findViewById(R.id.textViewDate);
-            imageViewStatus = (AppCompatImageView) view.findViewById(R.id.imageSyncStatus);
+            imageViewStatus = (AppCompatImageView) view.findViewById(R.id.imageSyncStatusUser);
         }
     }
 }
