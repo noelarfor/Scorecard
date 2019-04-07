@@ -10,6 +10,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -72,6 +73,7 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
 
     private GameRepo gameRepo;
     private List<Game> listGames;
+    private List<Result> listResults;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,6 +152,8 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
         result = new Result();
         resultRepo = new ResultRepo();
 
+        listResults = new ArrayList<>();
+
         typList = new ArrayList<>();
         for (int i = 0; i < listGames.size(); i++) {
             typList.add(listGames.get(i).getGame_name());
@@ -208,46 +212,18 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
                         result.setResult_loss(0);
                         result.setResult_diff(0);
                         result.setCreated_at(created_at);
+                        result.setSyncStatus(AppHelper.NOT_SYNCED_WITH_SERVER);
 
                         resultRepo.addResult(result);
                     }
 
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_ADD_SCORE,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    try {
-                                        JSONObject obj = new JSONObject(response);
-                                        if (!obj.getBoolean("error")) {
-                                            score = scoreRepo.getScoreByName(textInputEditTextScore.getText().toString().trim());
-                                            scoreRepo.updateScore(score, AppHelper.SYNCED_WITH_SERVER);
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    // on error storing the name to sqlite with status unsynced
-                                    Toast.makeText(getApplicationContext(), "RemoteDB: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            }) {
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<>();
-                            params.put("scorename", score.getScore_name());
-                            params.put("scoretyp", Integer.toString(score.getScore_typ()));
-                            params.put("scoremode", Integer.toString(score.getScore_mode()));
-                            params.put("num_users", Integer.toString(score.getNum_users()));
-                            params.put("timestamp", score.getLast_update());
-                            params.put("gameid", Integer.toString(score.getGame_id()));
-                            return params;
-                        }
-                    };
+                    score = scoreRepo.getScoreByName(textInputEditTextScore.getText().toString().trim());
+                    addScoreToRemoteDB(score);
 
-                    VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+                    listResults = resultRepo.getResultsOfScore(Integer.toString(score_id));
+                    for (int i = 0; i < listResults.size(); i++) {
+                        addResultToRemoteDB(listResults.get(i));
+                    }
 
                     Intent showResultIntent = new Intent(getApplicationContext(), ResultListActivity.class);
                     showResultIntent.putExtra("SCORE_ID", Integer.toString(score_id));
@@ -301,5 +277,85 @@ public class CreateScoreActivity extends AppCompatActivity implements View.OnCli
 
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
         return retVal;
+    }
+
+    private void addScoreToRemoteDB(final Score score) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_ADD_SCORE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            if (!obj.getBoolean("error")) {
+                                scoreRepo.updateScore(score, AppHelper.SYNCED_WITH_SERVER);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // on error storing the name to sqlite with status unsynced
+                        Toast.makeText(getApplicationContext(), "RemoteDB: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //for score
+                params.put("scorename", score.getScore_name());
+                params.put("scoretyp", Integer.toString(score.getScore_typ()));
+                params.put("scoremode", Integer.toString(score.getScore_mode()));
+                params.put("num_users", Integer.toString(score.getNum_users()));
+                params.put("timestamp", score.getLast_update());
+                params.put("gameid", Integer.toString(score.getGame_id()));
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    private void addResultToRemoteDB(final Result result) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_ADD_RESULT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            if (!obj.getBoolean("error")) {
+                                resultRepo.updateResultStatus(result, AppHelper.SYNCED_WITH_SERVER);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // on error storing the name to sqlite with status unsynced
+                        Toast.makeText(getApplicationContext(), "RemoteDB: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //for result
+                params.put("username", result.getUser_name());
+                params.put("scoreid", Integer.toString(result.getScore_id()));
+                params.put("win", Integer.toString(result.getResult_win()));
+                params.put("drawn", Integer.toString(result.getResult_drawn()));
+                params.put("loss", Integer.toString(result.getResult_loss()));
+                params.put("diff", Integer.toString(result.getResult_diff()));
+                params.put("timestamp", result.getCreated_at());
+                params.put("localresultid", Integer.toString(result.getResult_id()));
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

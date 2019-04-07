@@ -1,6 +1,10 @@
 package com.roleon.scorecard.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +19,7 @@ import android.view.View;
 import com.roleon.scorecard.R;
 import com.roleon.scorecard.adapters.ResultsRecyclerAdapter;
 import com.roleon.scorecard.helpers.AppHelper;
+import com.roleon.scorecard.helpers.NetworkStateChecker;
 import com.roleon.scorecard.helpers.SimpleDividerItemDecoration;
 import com.roleon.scorecard.model.Result;
 import com.roleon.scorecard.sql.repo.ResultRepo;
@@ -34,6 +39,9 @@ public class ResultListActivity extends AppCompatActivity implements View.OnClic
     private AppCompatButton appCompatButtonShowScoreList;
     private String scoreIdFromIntend;
 
+    private BroadcastReceiver broadcastReceiver;
+    private BroadcastReceiver networkCheckerReceiver;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +51,23 @@ public class ResultListActivity extends AppCompatActivity implements View.OnClic
         initViews();
         initObjects();
         initListeners();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //registering the broadcast receiver to update sync status
+        registerReceiver(broadcastReceiver, new IntentFilter(AppHelper.DATA_SAVED_BROADCAST));
+        registerReceiver(networkCheckerReceiver, new IntentFilter((ConnectivityManager.CONNECTIVITY_ACTION)));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(networkCheckerReceiver);
     }
 
     private void initViews() {
@@ -75,6 +100,21 @@ public class ResultListActivity extends AppCompatActivity implements View.OnClic
         scoreIdFromIntend = getIntent().getStringExtra("SCORE_ID");
 
         textViewUserNameResultList.setText(ScoreRepo.getScoreById(scoreIdFromIntend).getScore_name());
+
+        //the broadcast receiver to update sync status
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                getDataFromSQLite();
+            }
+        };
+
+        networkCheckerReceiver =  new NetworkStateChecker();
+
+        //registering the broadcast receiver to update sync status
+        registerReceiver(broadcastReceiver, new IntentFilter(AppHelper.DATA_SAVED_BROADCAST));
+        registerReceiver(networkCheckerReceiver, new IntentFilter((ConnectivityManager.CONNECTIVITY_ACTION)));
+
         getDataFromSQLite();
     }
 

@@ -84,8 +84,6 @@ public class UsersListActivity extends AppCompatActivity {
         String userFromIntent = getIntent().getStringExtra("USER_NAME");
         textViewName.setText(userFromIntent);
 
-        getDataFromSQLite();
-
         //the broadcast receiver to update sync status
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -99,6 +97,8 @@ public class UsersListActivity extends AppCompatActivity {
         //registering the broadcast receiver to update sync status
         registerReceiver(broadcastReceiver, new IntentFilter(AppHelper.DATA_SAVED_BROADCAST));
         registerReceiver(networkCheckerReceiver, new IntentFilter((ConnectivityManager.CONNECTIVITY_ACTION)));
+
+        getDataFromSQLite();
     }
 
     private void getDataFromSQLite() {

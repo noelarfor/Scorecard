@@ -17,7 +17,7 @@ import com.roleon.scorecard.sql.repo.UserRepo;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version - increase version each time after modified db
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Database Name
     private static final String DATABASE_NAME = "scorecardManager.db";
